@@ -100,37 +100,46 @@ public class jethroWTools
     return intNext;
   }
   // Load Map to array
-  public static String[] loadMap(Console con)
+  public static String[][] loadMap(Console con, String[][] strMap)
   {
     int intRow;
     int intColumn;
-    int intY = 0;
-    int intX = 0;
-    TextInputFile overworld = new TextInputFile("map.txt");
-    String strMapLine[] = new String[20];
+    TextInputFile map = new TextInputFile("map.csv");
     
     // Load Map into Char array
-    for(intRow = 0; overworld.eof() == false; intRow++)
+    for(intRow = 0; map.eof() == false; intRow++)
     {
-      strMapLine[intRow] = overworld.readLine();
+    	for(intColumn = 0; intColumn < 20; intColumn++)
+    	{
+    		strMap[intRow][intColumn] = map.readLine();
+    	}
     }
-    overworld.close();
+    map.close();
     
-    return strMapLine;
+    return strMap;
   }
   // Print Map to Screen
-  public static String[][] printMap(Console con, String strMapLine[])
+  public static void printMap(Console con, String strMap[][])
   {
     int intRow;
     int intColumn;
-    int intCount;
     int intX = 200;
     int intY = 100;
-    String strMap[][] = new String[20][20];
+    BufferedImage dirt = con.loadImage("dirt.jpg");
     
     // Load Textures
     
-    return strMap;
+    for(intRow = 0; intRow < 20; intRow ++)
+    {
+    	intX = (intRow * 40) + 200;
+    	
+    	for(intColumn = 0; intColumn < 20; intColumn++)
+    	{
+    		intY = (intColumn * 40) + 100;
+    		
+    		con.drawImage(dirt, intX, intY);
+    	}
+    }
   }
   // Draw Console
   public static void drawGameConsole(Console con)
@@ -152,7 +161,6 @@ public class jethroWTools
   {
     int intRow;
     int intColumn;
-    int intCount;
     Font defaultFont = con.loadFont("Hack-Regular.ttf", 15);
     double dblStats[][] = new double[3][5];
     TextInputFile playerStats = new TextInputFile("playerStats.txt");
@@ -180,7 +188,6 @@ public class jethroWTools
   {
     int intRow;
     int intColumn;
-    int intCount;
     int intRand = 0;
     int intEnemyType = 0;
     int intBarMultiplier;
@@ -662,7 +669,6 @@ public class jethroWTools
     int intX = 100;
     int intY = 200;
     String strTemp;
-    String strNum;
     
     for(intCountA = 0; intCountA < 10; intCountA++)
     {
