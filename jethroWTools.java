@@ -18,27 +18,17 @@ public class jethroWTools
   {
     int intNext = 1;
     char chrLR = 'n';
-    Font menuFont = con.loadFont("alagard.ttf", 90);
-    Font menuChoiceFont = con.loadFont("alagard.ttf", 30);
-    Font defaultFont = con.loadFont("Hack-Regular.ttf", 15);
-    BufferedImage dragon = con.loadImage("titleDragon.png");
-    BufferedImage background = con.loadImage("background.png");
-    
-    con.setDrawFont(menuFont);
-    con.drawImage(background, 0, 0);
-    con.repaint();
-    con.drawImage(dragon, 200, 0);
-    con.repaint();
-    con.setDrawColor(Color.BLACK);
-    con.drawString("How to Kill a Dragon", 205, 105);
-    con.repaint();
-    con.setDrawColor(Color.RED);
-    con.drawString("How to Kill a Dragon", 200, 100);
-    con.repaint();
+    // Font menuFont = con.loadFont("", );
+    // Font menuChoiceFont = con.loadFont("", );
+    // Font defaultFont = con.loadFont("", );
+    // BufferedImage dragon = con.loadImage("");
+    // BufferedImage background = con.loadImage("background.png");
     
     while(chrLR != ' ')
     {
-      con.setDrawFont(menuChoiceFont);
+      con.clear();
+      
+      // con.setDrawFont(menuChoiceFont);
       con.setDrawColor(Color.RED);
       if(intNext == 1)
       {
@@ -95,7 +85,7 @@ public class jethroWTools
         intNext = intNext + 1;
       }
       con.repaint();
-      con.setDrawFont(defaultFont);
+      // con.setDrawFont(defaultFont);
     }
     return intNext;
   }
@@ -104,42 +94,74 @@ public class jethroWTools
   {
     int intRow;
     int intColumn;
+    String[] strMapLine = new String [20];
     TextInputFile map = new TextInputFile("map.csv");
     
     // Load Map into Char array
     for(intRow = 0; map.eof() == false; intRow++)
     {
-    	for(intColumn = 0; intColumn < 20; intColumn++)
-    	{
-    		strMap[intRow][intColumn] = map.readLine();
-    	}
+      strMapLine[intRow] = map.readLine();
     }
     map.close();
+    
+    for(intRow = 0; intRow < 20; intRow++)
+    {
+    	for(intColumn = 0; intColumn < 20; intColumn++)
+    	{
+    		strMap[intColumn] = strMapLine[intColumn].split(",");
+    	}
+    }
     
     return strMap;
   }
   // Print Map to Screen
-  public static void printMap(Console con, String strMap[][])
+  public static void printMap(Console con, String strMap[][], int intPlayerX, int intPlayerY)
   {
     int intRow;
     int intColumn;
     int intX = 200;
     int intY = 100;
-    BufferedImage dirt = con.loadImage("dirt.jpg");
+    BufferedImage dirt = con.loadImage("dirt.png");
+	BufferedImage grass = con.loadImage("grass.png");
+    BufferedImage air = con.loadImage("air.png");
+    BufferedImage amethyst = con.loadImage("amethyst.png");
+    BufferedImage diamond = con.loadImage("diamond.png");
+    BufferedImage ironOre = con.loadImage("iron ore.png");
+    BufferedImage marble = con.loadImage("marble.png");
+    BufferedImage stone = con.loadImage("stone.png");
+    BufferedImage ruby = con.loadImage("ruby.png");
+    BufferedImage titaniumOre = con.loadImage("titanium ore.png");
     
     // Load Textures
     
     for(intRow = 0; intRow < 20; intRow ++)
     {
-    	intX = (intRow * 40) + 200;
-    	
+    	intX = 200;
     	for(intColumn = 0; intColumn < 20; intColumn++)
     	{
-    		intY = (intColumn * 40) + 100;
+    		if(strMap[intRow][intColumn].equals("d"))
+    		{
+    			con.drawImage(dirt, intX, intY);
+    		}
+    		else if(strMap[intRow][intColumn].equals("g"))
+    		{
+    			con.drawImage(grass, intX, intY);
+    		}
+    		else if(strMap[intRow][intColumn].equals("a"))
+    		{
+    			con.drawImage(air, intX, intY);
+    		}
+    		else if(strMap[intRow][intColumn].equals("u"))
+    		{
+    			con.drawImage(stone, intX, intY);
+    		}
+    		intX = intX + 40;
     		
-    		con.drawImage(dirt, intX, intY);
+    		con.repaint();
     	}
+    	intY = intY + 40;
     }
+    con.repaint();
   }
   // Draw Console
   public static void drawGameConsole(Console con)
@@ -150,11 +172,12 @@ public class jethroWTools
     con.setDrawColor(Color.BLACK);
     con.fillRect(850, 100, 300, 600);
     con.setDrawColor(Color.WHITE);
-    con.fillRect(850, 100, 4, 600);
-    con.fillRect(850, 100, 300, 4);
-    con.fillRect(850, 696, 300, 4);
-    con.fillRect(1146, 100, 4, 600);
-    con.drawString("Console:", 862, 112);
+    con.fillRect(1050, 100, 4, 800);
+    con.fillRect(1050, 100, 300, 4);
+    con.fillRect(1050, 896, 300, 4);
+    con.fillRect(1346, 100, 4, 800);
+    con.drawString("Console:", 1062, 112);
+    
     con.repaint();
   }
   public static void printStats(Console con)
@@ -249,7 +272,7 @@ public class jethroWTools
     
     while(intEndBattle == 0)
     {
-      jethroWTools.clear(con);
+      jethroWTools.clearUI(con);
       
       if(chrClan == 'f')
       {
@@ -607,12 +630,12 @@ public class jethroWTools
     }
   }
   // Victory Screen
-  public static void vScreen(Console con)
+  public static void victoryScreen(Console con)
   { 
     
   }
   // Lose Screen
-  public static void lScreen(Console con)
+  public static void loseScreen(Console con)
   {
     
   }
@@ -755,7 +778,7 @@ public class jethroWTools
     }
   }
   // Clear Screen Method
-  public static void clear(Console con)
+  public static void clearUI(Console con)
   {
     con.setDrawColor(Color.BLACK);
     con.fillRect(0, 0, 1200, 800);
