@@ -36,8 +36,8 @@ public class RPGMain
 		while (blnQuit == false)
 		{
 			// Menu
-			jethroWTools.clearUI(con);
-			intNext = jethroWTools.menu(con, chrInput);
+			Tools.clearUI(con);
+			intNext = Tools.menu(con, chrInput);
 			// jethroWTools.logo(con);
 
 			if (intNext == 1)
@@ -45,7 +45,7 @@ public class RPGMain
 				con.clear();
 
 				// Clear Screen
-				jethroWTools.clearUI(con);
+				Tools.clearUI(con);
 
 				// Reset Player Stats
 				// jethroWTools.resetStats(con);
@@ -63,10 +63,10 @@ public class RPGMain
 				// Print Map
 				if (temp == true)
 				{
-					jethroWTools.clearUI(con);
+					Tools.clearUI(con);
 
-					strMap = jethroWTools.loadMap(con, strMap);
-					jethroWTools.printMap(con, strMap, intX, intY);
+					strMap = Tools.loadMap(con, strMap);
+					Tools.printMap(con, strMap, intX, intY);
 
 					// Start Game
 					for (intScore = 0; blnWin == false; intScore++)
@@ -97,7 +97,7 @@ public class RPGMain
 							blnWin = true;
 						}
 
-						jethroWTools.printMap(con, strMap, intX, intY);
+						Tools.printMap(con, strMap, intX, intY);
 
 						// Player vs. Enemy
 

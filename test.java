@@ -6,7 +6,7 @@ public class test
 	{
 		Console con = new Console(1600, 1000);
 		
-		jethroWTools.drawGameConsole(con);
+		Tools.drawGameConsole(con);
 		
 		int intRow;
 	    int intColumn;
@@ -31,6 +31,6 @@ public class test
 	    	}
 	    }
 	    
-	    jethroWTools.printMap(con, strMap, intPlayerX, intPlayerY);
+	    Tools.printMap(con, strMap, intPlayerX, intPlayerY);
 	}
 }
