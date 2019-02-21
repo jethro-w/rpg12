@@ -124,16 +124,22 @@ public class jethroWTools
     BufferedImage dirt = con.loadImage("dirt.png");
 	BufferedImage grass = con.loadImage("grass.png");
     BufferedImage air = con.loadImage("air.png");
-    BufferedImage amethyst = con.loadImage("amethyst.png");
-    BufferedImage diamond = con.loadImage("diamond.png");
+    BufferedImage amethystOre = con.loadImage("amethyst.png");
+    BufferedImage diamondOre = con.loadImage("diamond.png");
     BufferedImage ironOre = con.loadImage("iron ore.png");
     BufferedImage marble = con.loadImage("marble.png");
     BufferedImage stone = con.loadImage("stone.png");
-    BufferedImage ruby = con.loadImage("ruby.png");
+    BufferedImage rubyOre = con.loadImage("ruby.png");
     BufferedImage titaniumOre = con.loadImage("titanium ore.png");
-    
-    // Load Textures
-    
+    BufferedImage enemy = con.loadImage("enemy.png");
+    BufferedImage boss = con.loadImage("boss.png");
+    BufferedImage player = con.loadImage("player.png");
+    BufferedImage item1 = con.loadImage("gold.png");
+    BufferedImage item2 = con.loadImage("demonite.png");
+    BufferedImage item3 = con.loadImage("cobalt.png");
+    BufferedImage item4 = con.loadImage("mythril.png");
+
+        
     for(intRow = 0; intRow < 20; intRow ++)
     {
     	intX = 200;
@@ -147,7 +153,7 @@ public class jethroWTools
     		{
     			con.drawImage(grass, intX, intY);
     		}
-    		else if(strMap[intRow][intColumn].equals("a"))
+    		else if(strMap[intRow][intColumn].equals("_"))
     		{
     			con.drawImage(air, intX, intY);
     		}
@@ -155,12 +161,47 @@ public class jethroWTools
     		{
     			con.drawImage(stone, intX, intY);
     		}
+    		else if(strMap[intRow][intColumn].equals("m"))
+    		{
+    			con.drawImage(marble, intX, intY);
+    		}
+    		else if(strMap[intRow][intColumn].equals("e"))
+    		{
+    			con.drawImage(amethystOre, intX, intY);
+    		}
+    		else if(strMap[intRow][intColumn].equals("a"))
+    		{
+    			con.drawImage(diamondOre, intX, intY);
+    		}
+    		else if(strMap[intRow][intColumn].equals("i"))
+    		{
+    			con.drawImage(ironOre, intX, intY);
+    		}
+    		else if(strMap[intRow][intColumn].equals("r"))
+    		{
+    			con.drawImage(rubyOre, intX, intY);
+    		}
+    		else if(strMap[intRow][intColumn].equals("t"))
+    		{
+    			con.drawImage(titaniumOre, intX, intY);
+    		}
+    		else if(strMap[intRow][intColumn].equals("x"))
+    		{
+    			con.drawImage(enemy, intX, intY);
+    		}
+    		else if(strMap[intRow][intColumn].equals("X"))
+    		{
+    			con.drawImage(boss, intX, intY);
+    		}
+    		
     		intX = intX + 40;
     		
     		con.repaint();
     	}
     	intY = intY + 40;
     }
+    
+    con.drawImage(player, intPlayerX, intPlayerY);
     con.repaint();
   }
   // Draw Console
@@ -223,23 +264,17 @@ public class jethroWTools
     double dblStats[][] = new double[3][5];
     Boolean blnDefend = false;
     Boolean blnEnemyDefend = false;
-    BufferedImage fire = con.loadImage("fire.png");
-    BufferedImage water = con.loadImage("water.png");
-    BufferedImage earth = con.loadImage("earth.png");
-    BufferedImage dragonAttack = con.loadImage("dragonAttack.png");
-    BufferedImage dragonDefend = con.loadImage("dragonDefend.png");
-    BufferedImage dragonStatic = con.loadImage("dragonStatic.png");
     BufferedImage skeletonStatic = con.loadImage("skeletonStatic.png");
     BufferedImage skeletonAttack = con.loadImage("skeletonAttack.png");
-    TextInputFile playerStats = new TextInputFile("playerStats.txt");
-    TextOutputFile printStats = new TextOutputFile("playerStats.txt");
+    TextInputFile statsIn = new TextInputFile("playerStats.txt");
+    TextOutputFile statsOut = new TextOutputFile("playerStats.txt");
     
     // Read player stats from playerStats.txt
     for(intRow = 0; intRow < 3; intRow++)
     {
       for(intColumn = 0; intColumn < 5; intColumn++)
       {
-        dblStats[intRow][intColumn] = playerStats.readDouble();
+        dblStats[intRow][intColumn] = statsIn.readDouble();
       }
     }
     
@@ -486,11 +521,11 @@ public class jethroWTools
     {
       for(intColumn = 0; intColumn < 5; intColumn++)
       {
-        printStats.println(dblStats[intRow][intColumn]);
+        statsOut.println(dblStats[intRow][intColumn]);
       }
     }
-    playerStats.close();
-    printStats.close();
+    statsIn.close();
+    statsOut.close();
     
     return intEndBattle;
   }

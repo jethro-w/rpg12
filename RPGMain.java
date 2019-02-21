@@ -23,7 +23,7 @@ public class RPGMain
 		char chrItem = ' ';
 		char chrInput = ' ';
 		char chrMove = ' ';
-		boolean temp = true;
+		Boolean temp = true;
 		// Font nameFont = con.loadFont("Hack-Regular.ttf", 20);
 		String strUsername;
 		String strMap[][] = new String[20][20];
