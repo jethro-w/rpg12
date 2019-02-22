@@ -135,27 +135,25 @@ public class RPGMain
 						}
 
 						Tools.printMap(con, strMap);
-						if (chrMove == 'a' || (chrPrevMove == 'a' && chrMove != 'd'))
+						if (chrMove == 'a')
 						{
 							con.drawImage(playerLeft, (intX * 40) + 200, (intY * 40) + 8100);
-							if (chrMove == 'a')
-							{
-								chrPrevMove = chrMove;
-							}
+							chrPrevMove = chrMove;
 						}
-						else if (chrMove == 'd' || (chrPrevMove == 'a' && chrMove != 'a'))
+						else if (chrMove == 'd')
 						{
 							con.drawImage(playerRight, (intX * 40) + 200, (intY * 40) + 100);
-							if (chrMove == 'd')
-							{
-								chrPrevMove = chrMove;
-							}
+							chrPrevMove = chrMove;
+						}
+						else
+						{
+							con.drawImage(playerLeft, (intX * 40) + 200, (intY * 40) + 100);
 						}
 
 						con.repaint();
 
 						// Player vs. Enemy
-
+						
 						// Items
 
 						// Reset variables
@@ -169,7 +167,7 @@ public class RPGMain
 				// Victory Screen
 				if (blnWin == true && blnLose == false)
 				{
-
+					
 				}
 				// Lose Screen
 				else
