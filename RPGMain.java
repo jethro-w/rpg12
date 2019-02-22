@@ -1,28 +1,31 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
+
 import arc.*;
 
 @SuppressWarnings("unused")
 public class RPGMain
 {
-	@SuppressWarnings("unused")
 	public static void main(String[] args)
 	{
 		Console con = new Console(1600, 1000);
 
 		int intNext = 0;
 		int intScore = 0;
-		int intX; // The starting position is at (19,2), but the array starts at 0
-		int intY; // Top left corner is (0,0).
+		int intX = 0; // The starting position is at (19,2), but the array starts at 0
+		int intY = 0; // Top left corner is (0,0).
 		int intPreX = 22;
 		int intPreY = 1;
 		int intBossHP;
 		int intRow;
 		int intColumn;
 		int intEndBattle = 0;
+		int intMap;
 		char chrItem = ' ';
 		char chrInput = ' ';
 		char chrMove = ' ';
+		char chrPrevMove = ' ';
 		Boolean temp = true;
 		// Font nameFont = con.loadFont("Hack-Regular.ttf", 20);
 		String strUsername;
@@ -30,6 +33,8 @@ public class RPGMain
 		Boolean blnQuit = false;
 		Boolean blnWin = false;
 		Boolean blnLose = false;
+		BufferedImage playerLeft = con.loadImage("anglerLeft.png");
+		BufferedImage playerRight = con.loadImage("anglerRight.png");
 		TextOutputFile highscores = new TextOutputFile("highscores.txt", true);
 
 		// Menu Loop
@@ -49,8 +54,6 @@ public class RPGMain
 
 				// Reset Player Stats
 				// jethroWTools.resetStats(con);
-				intY = 1;
-				intX = 22;
 
 				// Load Map
 
@@ -58,36 +61,74 @@ public class RPGMain
 				// con.setTextFont(nameFont);
 				con.println("Enter your username:");
 				strUsername = con.readLine();
+				
+				con.println("select map");
+				intMap = con.readInt();
 				con.clear();
-
+				
+				if(intMap == 1)
+				{
+					intX = 2;
+					intY = 0;
+				}
+				else if(intMap == 2)
+				{
+					intX = 19;
+					intY = 19;
+				}
+				
 				// Print Map
 				if (temp == true)
 				{
 					Tools.clearUI(con);
 
-					strMap = Tools.loadMap(con, strMap);
-					Tools.printMap(con, strMap, intX, intY);
-
+					strMap = Tools.loadMap(con, strMap, intMap);
+					Tools.printMap(con, strMap);
+					
+					con.drawImage(playerLeft, (intX * 40) + 200, (intY * 40) + 100);
+					con.repaint();
+					
 					// Start Game
 					for (intScore = 0; blnWin == false; intScore++)
 					{
-						if (chrMove == 'w' && intY != 0 && !strMap[intY - 1][intX].equals("u")
-								&& !strMap[intY - 1][intX].equals("l"))
+						while(chrMove != 'w' && chrMove != 'a' && chrMove != 's' && chrMove != 'd')
+						{
+							chrMove = con.getChar();
+						}
+						
+						if (chrMove == 'w' && intY != 0 && (strMap[intY - 1][intX].equals("_")
+								|| strMap[intY - 1][intX].equals("x") || strMap[intY - 1][intX].equals("X")
+								|| strMap[intY - 1][intX].equals("z") || strMap[intY - 1][intX].equals("c")
+								|| strMap[intY - 1][intX].equals("v") || strMap[intY - 1][intX].equals("1")
+								|| strMap[intY - 1][intX].equals("2") || strMap[intY - 1][intX].equals("3")
+								|| strMap[intY - 1][intX].equals("4")))
 						{
 							intY--;
 						}
-						else if (chrMove == 'a' && intX != 0 && !strMap[intY][intX - 1].equals("u")
-								&& !strMap[intY][intX - 1].equals("l"))
+						else if (chrMove == 'a' && intX != 0 && (strMap[intY][intX - 1].equals("_")
+								|| strMap[intY][intX - 1].equals("x") || strMap[intY][intX - 1].equals("X")
+								|| strMap[intY][intX - 1].equals("z") || strMap[intY][intX - 1].equals("c")
+								|| strMap[intY][intX - 1].equals("v") || strMap[intY][intX - 1].equals("1")
+								|| strMap[intY][intX - 1].equals("2") || strMap[intY][intX - 1].equals("3")
+								|| strMap[intY][intX - 1].equals("4")))
 						{
 							intX--;
 						}
-						else if (chrMove == 's' && intY != 19 && !strMap[intY + 1][intX].equals("u")
-								&& !strMap[intY + 1][intX].equals("l"))
+						else if (chrMove == 's' && intY != 19 && (strMap[intY + 1][intX].equals("_")
+								|| strMap[intY + 1][intX].equals("x") || strMap[intY + 1][intX].equals("X")
+								|| strMap[intY + 1][intX].equals("z") || strMap[intY + 1][intX].equals("c")
+								|| strMap[intY + 1][intX].equals("v") || strMap[intY + 1][intX].equals("1")
+								|| strMap[intY + 1][intX].equals("2") || strMap[intY + 1][intX].equals("3")
+								|| strMap[intY + 1][intX].equals("4")))
 						{
 							intY++;
 						}
-						else if (chrMove == 'd' && intX != 19 && !strMap[intY][intX + 1].equals("u")
-								&& !strMap[intY][intX + 1].equals("l"))
+						else if (chrMove == 'd' && intX != 19 && (strMap[intY][intX + 1].equals("_")
+								|| strMap[intY][intX + 1].equals("x") || strMap[intY][intX + 1].equals("X")
+								|| strMap[intY][intX + 1].equals("z") || strMap[intY][intX + 1].equals("c")
+								|| strMap[intY][intX + 1].equals("v") || strMap[intY][intX + 1].equals("1")
+								|| strMap[intY][intX + 1].equals("2") || strMap[intY][intX + 1].equals("3")
+								|| strMap[intY][intX + 1].equals("4")))
 						{
 							intX++;
 						}
@@ -97,7 +138,25 @@ public class RPGMain
 							blnWin = true;
 						}
 
-						Tools.printMap(con, strMap, intX, intY);
+						Tools.printMap(con, strMap);
+						if(chrMove == 'a' || (chrPrevMove == 'a' && chrMove != 'd'))
+						{
+							con.drawImage(playerLeft, (intX * 40) + 200, (intY * 40) + 8100);
+							if(chrMove == 'a')
+							{
+								chrPrevMove = chrMove;
+							}
+						}
+						else if(chrMove == 'd' || (chrPrevMove == 'a' && chrMove != 'a'))
+						{
+							con.drawImage(playerRight, (intX * 40) + 200, (intY * 40) + 100);
+							if(chrMove == 'd')
+							{
+								chrPrevMove = chrMove;
+							}
+						}
+						
+						con.repaint();
 
 						// Player vs. Enemy
 
@@ -149,6 +208,5 @@ public class RPGMain
 				con.closeConsole();
 			}
 		}
-
 	}
 }
