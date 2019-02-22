@@ -34,16 +34,20 @@ public class Tools
 			if (intNext == 1)
 			{
 				con.drawString("Play Game", 200, 500);
-			} else if (intNext == 2)
+			}
+			else if (intNext == 2)
 			{
 				con.drawString("Controls", 400, 500);
-			} else if (intNext == 3)
+			}
+			else if (intNext == 3)
 			{
 				con.drawString("Help", 600, 500);
-			} else if (intNext == 4)
+			}
+			else if (intNext == 4)
 			{
 				con.drawString("High Scores", 750, 500);
-			} else if (intNext == 5)
+			}
+			else if (intNext == 5)
 			{
 				con.drawString("Quit", 1000, 500);
 			}
@@ -76,7 +80,8 @@ public class Tools
 			if (chrLR == 'a' && intNext != 1)
 			{
 				intNext = intNext - 1;
-			} else if (chrLR == 'd' && intNext != 5)
+			}
+			else if (chrLR == 'd' && intNext != 5)
 			{
 				intNext = intNext + 1;
 			}
@@ -102,7 +107,8 @@ public class Tools
 				strMapLine[intRow] = map1.readLine();
 			}
 			map1.close();
-		} else if (intMap == 2)
+		}
+		else if (intMap == 2)
 		{
 			TextInputFile map2 = new TextInputFile("map2.csv");
 
@@ -145,6 +151,7 @@ public class Tools
 		BufferedImage titaniumOre = con.loadImage("titanium ore.png");
 		// BufferedImage enemy = con.loadImage("enemy.png");
 		// BufferedImage boss = con.loadImage("boss.png");
+		BufferedImage zombie = con.loadImage("zombie.png");
 		BufferedImage item1 = con.loadImage("gold.png");
 		BufferedImage item2 = con.loadImage("demonite.png");
 		BufferedImage item3 = con.loadImage("cobalt.png");
@@ -202,6 +209,10 @@ public class Tools
 				else if (strMap[intRow][intColumn].equals("X"))
 				{
 					// con.drawImage(boss, intX, intY);
+				}
+				else if (strMap[intRow][intColumn].equals("z"))
+				{
+					con.drawImage(zombie, intX, intY);
 				}
 				else if (strMap[intRow][intColumn].equals("1"))
 				{
@@ -305,10 +316,12 @@ public class Tools
 			}
 		}
 
-		if (strMap[intY][intX].equals("e"))
+		if (strMap[intY][intX].equals("z") || strMap[intY][intX].equals("x") || strMap[intY][intX].equals("c")
+				|| strMap[intY][intX].equals("v"))
 		{
 			intEnemyType = 1;
-		} else if (strMap[intY][intX].equals("b"))
+		}
+		else if (strMap[intY][intX].equals("X"))
 		{
 			intEnemyType = 2;
 		}
@@ -379,7 +392,8 @@ public class Tools
 					con.repaint();
 					con.setDrawColor(Color.RED);
 					con.fillRect(200, 100, 200, 30);
-				} else if (dblStats[intEnemyType][0] <= 0.0)
+				}
+				else if (dblStats[intEnemyType][0] <= 0.0)
 				{
 					con.drawString("You have defeated the enemy.", 192, 596);
 					intEndBattle = 1;
@@ -403,7 +417,8 @@ public class Tools
 					if (blnEnemyDefend == false)
 					{
 						dblStats[intEnemyType][0] = dblStats[intEnemyType][0] - dblStats[0][1];
-					} else if (blnEnemyDefend == true)
+					}
+					else if (blnEnemyDefend == true)
 					{
 						dblStats[intEnemyType][0] = dblStats[intEnemyType][0] - dblStats[0][1]
 								+ dblStats[intEnemyType][2];
@@ -411,12 +426,14 @@ public class Tools
 					}
 					con.drawString("You chose to attack.", 192, 596);
 					con.repaint();
-				} else if (chrMove == '2')
+				}
+				else if (chrMove == '2')
 				{
 					blnDefend = true;
 					con.drawString("You chose to defend.", 192, 596);
 					con.repaint();
-				} else if (chrMove == '3')
+				}
+				else if (chrMove == '3')
 				{
 					for (intColumn = 2; intColumn < 5; intColumn++)
 					{
@@ -424,14 +441,16 @@ public class Tools
 					}
 					con.drawString("You chose to buff.", 192, 596);
 					con.repaint();
-				} else if (chrMove == '4')
+				}
+				else if (chrMove == '4')
 				{
 					if (intMaxHP - (int) dblStats[0][4] >= (dblStats[0][0]))
 					{
 						dblStats[0][0] = dblStats[0][0] + dblStats[0][4];
 						con.drawString("You chose to heal.", 192, 596);
 						con.repaint();
-					} else
+					}
+					else
 					{
 						con.drawString("You cannot heal.", 192, 596);
 						con.repaint();
@@ -472,7 +491,8 @@ public class Tools
 					if (blnDefend == false)
 					{
 						dblStats[0][0] = dblStats[0][0] - dblStats[intEnemyType][1];
-					} else if (blnDefend == true)
+					}
+					else if (blnDefend == true)
 					{
 						dblStats[0][0] = dblStats[0][0] - dblStats[intEnemyType][1] + dblStats[0][2];
 						blnDefend = false;
@@ -483,13 +503,15 @@ public class Tools
 						con.fillRect(600, 150, 600, 400);
 						con.repaint();
 						con.drawImage(skeletonAttack, 550, 200);
-					} else if (intEnemyType == 2)
+					}
+					else if (intEnemyType == 2)
 					{
 						con.setDrawColor(Color.BLACK);
 						con.fillRect(600, 150, 600, 400);
 						con.repaint();
 					}
-				} else if ((intEnemyType == 1 && intRand == 2) || (intEnemyType == 2 && intRand >= 7 && intRand <= 10))
+				}
+				else if ((intEnemyType == 1 && intRand == 2) || (intEnemyType == 2 && intRand >= 7 && intRand <= 10))
 				{
 					blnEnemyDefend = true;
 					con.drawString("The enemy chose to defend.", 192, 596);
@@ -500,13 +522,15 @@ public class Tools
 						con.fillRect(600, 150, 600, 400);
 						con.repaint();
 						con.drawImage(skeletonStatic, 750, 200);
-					} else if (intEnemyType == 2)
+					}
+					else if (intEnemyType == 2)
 					{
 						con.setDrawColor(Color.BLACK);
 						con.fillRect(600, 150, 600, 400);
 						con.repaint();
 					}
-				} else if (intRand >= 8 && intRand <= 10)
+				}
+				else if (intRand >= 8 && intRand <= 10)
 				{
 					dblStats[intEnemyType][0] = dblStats[intEnemyType][0] + dblStats[intEnemyType][4];
 				}
@@ -534,18 +558,18 @@ public class Tools
 		int intRow;
 		int intColumn;
 		double dblStats[][] = new double[3][5];
-		TextInputFile playerStats = new TextInputFile("playerStats.txt");
-		TextOutputFile printStats = new TextOutputFile("playerStats.txt");
+		TextInputFile statsIn = new TextInputFile("playerStats.txt");
+		TextOutputFile statsOut = new TextOutputFile("playerStats.txt");
 
 		// Read player stats from playerStats.txt (items affect player stats)
 		for (intRow = 0; intRow < 3; intRow++)
 		{
 			for (intColumn = 0; intColumn < 5; intColumn++)
 			{
-				dblStats[intRow][intColumn] = playerStats.readDouble();
+				dblStats[intRow][intColumn] = statsIn.readDouble();
 			}
 		}
-		playerStats.close();
+		statsIn.close();
 
 		// Column 0 = Health
 		// Column 1 = Attack
@@ -573,14 +597,6 @@ public class Tools
 		else if (strMap[intY][intX].equals("4"))
 		{
 
-		} else if (strMap[intY][intX].equals("5"))
-		{
-
-		}
-		// Potion of Health
-		else if (strMap[intY][intX].equals("6"))
-		{
-
 		}
 		con.repaint();
 		strMap[intY][intX] = "g";
@@ -589,7 +605,7 @@ public class Tools
 		{
 			for (intColumn = 0; intColumn < 5; intColumn++)
 			{
-				printStats.println(dblStats[intRow][intColumn]);
+				statsOut.println(dblStats[intRow][intColumn]);
 			}
 		}
 	}
@@ -616,7 +632,8 @@ public class Tools
 			dblStats[0][0] = dblStats[0][0] - 10;
 			con.drawString("Ouch...that did 5 damage.", 862, 184);
 			con.repaint();
-		} else if (chrClan == 'e')
+		}
+		else if (chrClan == 'e')
 		{
 			dblStats[0][0] = dblStats[0][0] - 5;
 			con.drawString("Ouch...that did 5 damage.", 862, 184);
@@ -697,13 +714,12 @@ public class Tools
 		{
 			if (intPage == 1)
 			{
-
 				if (chrLeave == 's')
 				{
 					blnLeave = true;
-				} else if (blnLeave == false)
+				}
+				else if (blnLeave == false)
 				{
-
 					con.getChar();
 					blnLeave = true;
 				}
@@ -803,10 +819,12 @@ public class Tools
 			if (strHighscores[intCountA][2].equals("f"))
 			{
 				con.drawString("Fire", intX + 900, intY);
-			} else if (strHighscores[intCountA][2].equals("e"))
+			}
+			else if (strHighscores[intCountA][2].equals("e"))
 			{
 				con.drawString("Earth", intX + 900, intY);
-			} else if (strHighscores[intCountA][2].equals("w"))
+			}
+			else if (strHighscores[intCountA][2].equals("w"))
 			{
 				con.drawString("Water", intX + 900, intY);
 			}

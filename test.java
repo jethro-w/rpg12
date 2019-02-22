@@ -14,7 +14,7 @@ public class test
 	    int intPlayerY = 1;
 	    String[] strMapLine = new String [20];
 	    String[][] strMap = new String[20][20];
-	    TextInputFile map = new TextInputFile("map.csv");
+	    TextInputFile map = new TextInputFile("map1.csv");
 	    
 	    // Load Map into Char array
 	    for(intRow = 0; map.eof() == false; intRow++)
@@ -31,6 +31,6 @@ public class test
 	    	}
 	    }
 	    
-	    Tools.printMap(con, strMap, intPlayerX, intPlayerY);
+	    Tools.printMap(con, strMap);
 	}
 }
