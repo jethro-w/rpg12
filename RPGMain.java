@@ -1,9 +1,9 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
-
 import arc.*;
 
+@SuppressWarnings("unused")
 public class RPGMain
 {
 	public static void main(String[] args)
@@ -14,8 +14,8 @@ public class RPGMain
 		int intScore = 0;
 		int intX = 0; // The starting position is at (19,2), but the array starts at 0
 		int intY = 0; // Top left corner is (0,0).
-		int intPreX = 22;
-		int intPreY = 1;
+		int intPrevX = 22;
+		int intPrevY = 1;
 		int intEndBattle = 0;
 		int intMap;
 		char chrInput = ' ';
@@ -134,32 +134,50 @@ public class RPGMain
 							blnWin = true;
 						}
 
+						con.repaint();
+						// Player vs. Enemy
+						 
+						if (strMap[intY][intX].equals("x") || strMap[intY][intX].equals("v")
+								|| strMap[intY][intX].equals("c") || strMap[intY][intX].equals("X")
+								|| strMap[intY][intX].equals("z"))
+						{
+							intEndBattle = Tools.battle(con, intY, intX, strMap);
+							
+							if (intEndBattle == 1)
+							{
+								
+							}
+							else if (intEndBattle == 2)
+							{
+								blnWin = true;
+							}
+						}
+						
 						Tools.printMap(con, strMap);
-						if (chrMove == 'a')
-						{
-							con.drawImage(playerLeft, (intX * 40) + 200, (intY * 40) + 8100);
-							chrPrevMove = chrMove;
-						}
-						else if (chrMove == 'd')
-						{
-							con.drawImage(playerRight, (intX * 40) + 200, (intY * 40) + 100);
-							chrPrevMove = chrMove;
-						}
-						else
+						
+						if (chrMove == 'a' || (chrPrevMove == 'a' && chrMove != 'd'))
 						{
 							con.drawImage(playerLeft, (intX * 40) + 200, (intY * 40) + 100);
+							if (chrMove == 'a')
+							{
+								chrPrevMove = chrMove;
+							}
 						}
-
-						con.repaint();
-
-						// Player vs. Enemy
+						else if (chrMove == 'd' || (chrPrevMove == 'd' && chrMove != 'a'))
+						{
+							con.drawImage(playerRight, (intX * 40) + 200, (intY * 40) + 100);
+							if (chrMove == 'd')
+							{
+								chrPrevMove = chrMove;
+							}
+						}
 						
 						// Items
 
 						// Reset variables
 						intEndBattle = 0;
-						intPreX = intX;
-						intPreY = intY;
+						intPrevX = intX;
+						intPrevY = intY;
 						chrMove = ' ';
 						chrItem = ' ';
 					}

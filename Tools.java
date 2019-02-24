@@ -206,6 +206,10 @@ public class Tools
 				{
 					// con.drawImage(enemy, intX, intY);
 				}
+				else if (strMap[intRow][intColumn].equals("v"))
+				{
+					// con.drawImage(, intX, intY);
+				}
 				else if (strMap[intRow][intColumn].equals("X"))
 				{
 					// con.drawImage(boss, intX, intY);
@@ -286,7 +290,7 @@ public class Tools
 	}
 
 	// Battle
-	public static int battle(Console con, int intY, int intX, String strMap[][], char chrClan)
+	public static int battle(Console con, int intY, int intX, String strMap[][])
 	{
 		int intRow;
 		int intColumn;
@@ -316,14 +320,27 @@ public class Tools
 			}
 		}
 
-		if (strMap[intY][intX].equals("z") || strMap[intY][intX].equals("x") || strMap[intY][intX].equals("c")
-				|| strMap[intY][intX].equals("v"))
+		if (strMap[intY][intX].equals("z"))
 		{
+			// zombie
 			intEnemyType = 1;
+		}
+		else if (strMap[intY][intX].equals("x"))
+		{
+			// skeleton
+			intEnemyType = 2;
+		}
+		else if (strMap[intY][intX].equals("v"))
+		{
+			intEnemyType = 3;
+		}
+		else if (strMap[intY][intX].equals("c"))
+		{
+			intEnemyType = 4;
 		}
 		else if (strMap[intY][intX].equals("X"))
 		{
-			intEnemyType = 2;
+			intEnemyType = 5;
 		}
 		intEMaxHP = (int) (dblStats[intEnemyType][0]);
 
@@ -334,11 +351,12 @@ public class Tools
 		// Column 4 = Heal
 
 		// Draw Game Console
+		con.clear();
 		con.setDrawColor(Color.WHITE);
-		con.fillRect(168, 560, 864, 4);
-		con.fillRect(168, 656, 864, 4);
-		con.fillRect(168, 560, 4, 96);
-		con.fillRect(1028, 560, 4, 96);
+		con.fillRect(200, 640, 1192, 4);
+		con.fillRect(200, 796, 1192, 4);
+		con.fillRect(200, 640, 4, 152);
+		con.fillRect(1400, 640, 4, 152);
 		con.drawString("Console:", 192, 572);
 		con.drawString("You have been approached by an enemy!", 192, 596);
 		con.repaint();
