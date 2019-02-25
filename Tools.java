@@ -297,131 +297,188 @@ public class Tools
 		int intRand = 0;
 		int intEnemyType = 0;
 		int intBarMultiplier;
-		int intMaxHP = 200;
+		int intPMaxHP = 200;
 		int intEMaxHP;
 		int intEndBattle = 0;
-		int intEMissingHP;
-		int intEnemyMissingHP;
+		int intPMissingHP = 0;
+		int intEMissingHP = 0;
 		char chrMove = 'n';
 		double dblStats[][] = new double[3][5];
 		Boolean blnDefend = false;
 		Boolean blnEnemyDefend = false;
-		BufferedImage skeletonStatic = con.loadImage("skeletonStatic.png");
-		BufferedImage skeletonAttack = con.loadImage("skeletonAttack.png");
+		BufferedImage enemyAttack = con.loadImage("skeletonAttack.png");
+		BufferedImage enemyStatic = con.loadImage("skeletonStatic.png");
+		BufferedImage background = con.loadImage("battleBackground.png");
+		BufferedImage pBackground = con.loadImage("playerBackground.png");
+		BufferedImage eBackground = con.loadImage("enemyBackground.png");
+		BufferedImage hBackground = con.loadImage("healthbarBackground.png");
 		TextInputFile statsIn = new TextInputFile("playerStats.txt");
 		TextOutputFile statsOut = new TextOutputFile("playerStats.txt");
 
 		// Read player stats from playerStats.txt
 		for (intRow = 0; intRow < 3; intRow++)
 		{
-			for (intColumn = 0; intColumn < 5; intColumn++)
+			for (intColumn = 0; intColumn < 3; intColumn++)
 			{
 				dblStats[intRow][intColumn] = statsIn.readDouble();
 			}
 		}
+		
+		// Row 0 = Player
+		// Row 1 = Basic Enemy
+		// Row 2 = Boss
+		
+		// Column 0 = Base Health
+		// Column 1 = Attack
+		// Column 2 = Defend
 
-		if (strMap[intY][intX].equals("z"))
+		if (strMap[intY][intX].equals("z") || strMap[intY][intX].equals("x")
+				|| strMap[intY][intX].equals("v") || strMap[intY][intX].equals("c"))
 		{
-			// zombie
 			intEnemyType = 1;
-		}
-		else if (strMap[intY][intX].equals("x"))
-		{
-			// skeleton
-			intEnemyType = 2;
-		}
-		else if (strMap[intY][intX].equals("v"))
-		{
-			intEnemyType = 3;
-		}
-		else if (strMap[intY][intX].equals("c"))
-		{
-			intEnemyType = 4;
+			if (strMap[intY][intX].equals("x"))
+			{
+				//enemyStatic = con.loadImage("skeletonStatic.png");
+				//enemyAttack = con.loadImage("skeletonAttack.png");
+			}
+			else if (strMap[intY][intX].equals("z"))
+			{
+				//enemyStatic = con.loadImage("zombieStatic.png");
+				//enemyAttack = con.loadImage("zombieAttack.png");
+			}
+			else if (strMap[intY][intX].equals("v"))
+			{
+				
+			}
+			else if (strMap[intY][intX].equals("c"))
+			{
+				
+			}
 		}
 		else if (strMap[intY][intX].equals("X"))
 		{
-			intEnemyType = 5;
+			intEnemyType = 2;
+			
+			enemyStatic = con.loadImage("bossStatic.png");
+			enemyAttack = con.loadImage("bossAttack.png");
 		}
+		
 		intEMaxHP = (int) (dblStats[intEnemyType][0]);
 
-		// Column 0 = Health
-		// Column 1 = Attack
-		// Column 2 = Defend
-		// Column 3 = Buff
-		// Column 4 = Heal
-
 		// Draw Game Console
-		con.clear();
-		con.setDrawColor(Color.WHITE);
-		con.fillRect(200, 640, 1192, 4);
-		con.fillRect(200, 796, 1192, 4);
-		con.fillRect(200, 640, 4, 152);
-		con.fillRect(1400, 640, 4, 152);
-		con.drawString("Console:", 192, 572);
-		con.drawString("You have been approached by an enemy!", 192, 596);
+		Tools.clearAll(con);
+		
+		con.drawImage(background, 0, 0);
+		Tools.drawBattleConsole(con);
+		con.drawString("You have been approached by an enemy...", 216, 756);
 		con.repaint();
 		con.sleep(2000);
-
+		
+		Tools.battleClear(con);
+		
 		while (intEndBattle == 0)
 		{
-			Tools.clearUI(con);
-
 			if (intEnemyType == 1)
 			{
-				con.drawImage(skeletonStatic, 750, 200);
+				con.drawImage(enemyStatic, 1050, 300);
 			}
-
+			
+			Tools.drawBattleConsole(con);
+			con.drawString("What will you do?", 216, 756);
+			con.drawString("[1] Attack", 216, 790);
+			con.drawString("[2] Block/Defend", 216, 820);
+			con.drawImage(hBackground, 0, 0);
+			
+			if (dblStats[0][0] < 0)
+			{
+				con.drawString("Health: 0 / " + intPMaxHP, 200, 170);
+			}
+			else
+			{
+				con.drawString("Health: " + (int) dblStats[0][0] + " / " + intPMaxHP, 200, 170);
+			}
+			
+			if (dblStats[intEnemyType][0] < 0)
+			{
+				con.drawString("Health: 0 / " + intEMaxHP, 1000, 170);
+			}
+			else
+			{
+				con.drawString("Health: " + (int) dblStats[intEnemyType][0] + " / " + intEMaxHP, 1000, 170);
+			}
 			con.repaint();
-
-			con.setDrawColor(Color.WHITE);
-			con.fillRect(168, 560, 864, 4);
-			con.fillRect(168, 656, 864, 4);
-			con.fillRect(168, 560, 4, 96);
-			con.fillRect(1028, 560, 4, 96);
-			con.drawString("Console:", 192, 572);
-			con.drawString("What will you do?", 192, 596);
-			con.drawString("[1] Attack          [2]Block/Defend         [3]Buff          [4]Heal", 192, 620);
-			con.drawString("Health: " + (int) dblStats[0][0] + " / " + intMaxHP, 200, 70);
-			con.drawString("Health: " + (int) dblStats[intEnemyType][0] + " / " + intEMaxHP, 800, 70);
-			con.repaint();
-
+			
 			// Health Bars
 			con.setDrawColor(Color.GREEN);
-			con.fillRect(200, 100, 200, 30);
-			con.fillRect(800, 100, 200, 30);
+			con.fillRect(200, 200, 300, 40);
+			con.fillRect(1000, 200, 300, 40);
 			con.repaint();
 			con.setDrawColor(Color.RED);
-			intBarMultiplier = 200 / intEMaxHP;
-			intEMissingHP = intMaxHP - (int) dblStats[0][0];
-			intEnemyMissingHP = intEMaxHP - (int) dblStats[intEnemyType][0];
+			
+			intBarMultiplier = 300 / intEMaxHP;
+			
+			if (dblStats[0][0] < 0.0)
+			{
+				intPMissingHP = 200;
+			}
+			else
+			{
+				intPMissingHP = intPMaxHP - (int) dblStats[0][0];
+			}
+			if (dblStats[intEnemyType][0] < 0.0)
+			{
+				if (intEnemyType == 1)
+				{
+					intEMissingHP = 150;
+				}
+				else if (intEnemyType == 2)
+				{
+					intEMissingHP = 400;
+				}
+			}
+			else
+			{
+				intEMissingHP = intEMaxHP - (int) dblStats[intEnemyType][0];
+			}
+			
 			// Player Red Bar
-			con.fillRect(400 - intEMissingHP, 100, intEMissingHP, 30);
+			con.fillRect(500 - intPMissingHP, 200, intPMissingHP, 40);
+			
 			// Enemy Red Bar
-			con.fillRect(1000 - (intEnemyMissingHP * intBarMultiplier), 100, intEnemyMissingHP * intBarMultiplier, 30);
+			con.fillRect(1300 - (intEMissingHP * intBarMultiplier), 200, intEMissingHP * intBarMultiplier, 40);
 			con.repaint();
-
+			
 			if (dblStats[0][0] <= 0.0 || dblStats[intEnemyType][0] <= 0.0)
 			{
-				Tools.battleConsoleClear(con);
-				if (dblStats[0][0] <= 0.0)
+				Tools.drawBattleConsole(con);
+				
+				if (intEnemyType == 2 && dblStats[intEnemyType][0] <= 0.0)
 				{
-					con.drawString("You have been defeated.", 192, 596);
+					con.drawString("You have defeated the enemy.", 216, 756);
+					intEndBattle = 3;
+					con.setDrawColor(Color.RED);
+					con.fillRect(200, 200, 300, 40);
+				}
+				else if (dblStats[0][0] <= 0.0)
+				{
+					con.drawString("You have been defeated.", 216, 756);
 					intEndBattle = 2;
 					con.repaint();
 					con.setDrawColor(Color.RED);
-					con.fillRect(200, 100, 200, 30);
+					con.fillRect(200, 200, 300, 40);
 				}
 				else if (dblStats[intEnemyType][0] <= 0.0)
 				{
-					con.drawString("You have defeated the enemy.", 192, 596);
+					con.drawString("You have defeated the enemy.", 216, 756);
 					intEndBattle = 1;
 					con.repaint();
 					con.setDrawColor(Color.RED);
-					con.fillRect(800, 100, 200, 30);
+					con.fillRect(1000, 200, 300, 40);
 				}
 				con.repaint();
 				con.sleep(1000);
 			}
+			
 			if (intEndBattle == 0)
 			{
 				while (chrMove != '1' && chrMove != '2' && chrMove != '3' && chrMove != '4' && chrMove != '5')
@@ -429,7 +486,9 @@ public class Tools
 					chrMove = con.getChar();
 					con.setDrawColor(Color.WHITE);
 				}
-				Tools.battleConsoleClear(con);
+				
+				Tools.drawBattleConsole(con);
+				
 				if (chrMove == '1')
 				{
 					if (blnEnemyDefend == false)
@@ -442,53 +501,29 @@ public class Tools
 								+ dblStats[intEnemyType][2];
 						blnEnemyDefend = false;
 					}
-					con.drawString("You chose to attack.", 192, 596);
+					con.drawString("You chose to attack.", 216, 756);
 					con.repaint();
 				}
 				else if (chrMove == '2')
 				{
 					blnDefend = true;
-					con.drawString("You chose to defend.", 192, 596);
+					con.drawString("You chose to defend.", 216, 756);
 					con.repaint();
-				}
-				else if (chrMove == '3')
-				{
-					for (intColumn = 2; intColumn < 5; intColumn++)
-					{
-						dblStats[0][intColumn] = dblStats[0][intColumn] + 0.25;
-					}
-					con.drawString("You chose to buff.", 192, 596);
-					con.repaint();
-				}
-				else if (chrMove == '4')
-				{
-					if (intMaxHP - (int) dblStats[0][4] >= (dblStats[0][0]))
-					{
-						dblStats[0][0] = dblStats[0][0] + dblStats[0][4];
-						con.drawString("You chose to heal.", 192, 596);
-						con.repaint();
-					}
-					else
-					{
-						con.drawString("You cannot heal.", 192, 596);
-						con.repaint();
-					}
 				}
 				// SECRET CODE
 				else if (chrMove == '5')
 				{
 					intEndBattle = 1;
 				}
-				con.drawString("Console", 192, 572);
 
-				con.drawString("Press [space] to continue.", 192, 620);
+				con.drawString("Press [space] to continue.", 216, 796);
 				con.repaint();
 
 				while (chrMove != ' ')
 				{
 					chrMove = con.getChar();
 				}
-
+				
 				// Enemy's Turn
 				// Plain Enemy
 				if (intEnemyType == 1)
@@ -500,12 +535,15 @@ public class Tools
 				{
 					intRand = (int) (Math.random() * 10) + 1;
 				}
-				Tools.battleConsoleClear(con);
-
+				
+				Tools.drawBattleConsole(con);
+				
+				// 50/50 for normal enemy and 70/30 for boss
 				if ((intEnemyType == 1 && intRand == 1) || (intEnemyType == 2 && intRand >= 1 && intRand <= 7))
 				{
-					con.drawString("The enemy chose to attack.", 192, 596);
+					con.drawString("The enemy chose to attack.", 216, 796);
 					con.repaint();
+					
 					if (blnDefend == false)
 					{
 						dblStats[0][0] = dblStats[0][0] - dblStats[intEnemyType][1];
@@ -515,56 +553,33 @@ public class Tools
 						dblStats[0][0] = dblStats[0][0] - dblStats[intEnemyType][1] + dblStats[0][2];
 						blnDefend = false;
 					}
-					if (intEnemyType == 1)
-					{
-						con.setDrawColor(Color.BLACK);
-						con.fillRect(600, 150, 600, 400);
-						con.repaint();
-						con.drawImage(skeletonAttack, 550, 200);
-					}
-					else if (intEnemyType == 2)
-					{
-						con.setDrawColor(Color.BLACK);
-						con.fillRect(600, 150, 600, 400);
-						con.repaint();
-					}
+					
+					con.drawImage(eBackground, 850, 250);
+					con.drawImage(enemyAttack, 1050, 300);
 				}
-				else if ((intEnemyType == 1 && intRand == 2) || (intEnemyType == 2 && intRand >= 7 && intRand <= 10))
+				else if ((intEnemyType == 1 && intRand == 2) || (intEnemyType == 2 && intRand > 7 && intRand <= 10))
 				{
 					blnEnemyDefend = true;
-					con.drawString("The enemy chose to defend.", 192, 596);
+					con.drawString("The enemy chose to defend.", 216, 796);
 					con.repaint();
-					if (intEnemyType == 1)
-					{
-						con.setDrawColor(Color.BLACK);
-						con.fillRect(600, 150, 600, 400);
-						con.repaint();
-						con.drawImage(skeletonStatic, 750, 200);
-					}
-					else if (intEnemyType == 2)
-					{
-						con.setDrawColor(Color.BLACK);
-						con.fillRect(600, 150, 600, 400);
-						con.repaint();
-					}
+					
+					con.drawImage(eBackground, 850, 250);
+					con.drawImage(enemyStatic, 1050, 300);
 				}
-				else if (intRand >= 8 && intRand <= 10)
-				{
-					dblStats[intEnemyType][0] = dblStats[intEnemyType][0] + dblStats[intEnemyType][4];
-				}
+				con.repaint();
 				con.sleep(1000);
 			}
 		}
+		
+		
 		// Print Stats Back into playerStats.txt (only player stats change)
 		dblStats[1][0] = 50;
 
-		for (intRow = 0; intRow < 3; intRow++)
+		for (intColumn = 0; intColumn < 3; intColumn++)
 		{
-			for (intColumn = 0; intColumn < 5; intColumn++)
-			{
-				statsOut.println(dblStats[intRow][intColumn]);
-			}
+			statsOut.println(dblStats[0][intColumn]);
 		}
+		
 		statsIn.close();
 		statsOut.close();
 
@@ -672,28 +687,22 @@ public class Tools
 	{
 		int intRow;
 		int intColumn;
-		double dblStats[][] = new double[3][5];
+		double dblStats[][] = new double[3][3];
 		TextOutputFile printStats = new TextOutputFile("playerStats.txt");
-
+		
 		dblStats[0][0] = 200;
 		dblStats[0][1] = 20;
 		dblStats[0][2] = 15;
-		dblStats[0][3] = 5;
-		dblStats[0][4] = 12;
-		dblStats[1][0] = 50;
+		dblStats[1][0] = 150;
 		dblStats[1][1] = 15;
 		dblStats[1][2] = 15;
-		dblStats[1][3] = 0;
-		dblStats[1][4] = 0;
-		dblStats[2][0] = 150;
-		dblStats[2][1] = 21;
+		dblStats[2][0] = 400;
+		dblStats[2][1] = 20;
 		dblStats[2][2] = 12;
-		dblStats[2][3] = 0;
-		dblStats[2][4] = 3;
 
 		for (intRow = 0; intRow < 3; intRow++)
 		{
-			for (intColumn = 0; intColumn < 5; intColumn++)
+			for (intColumn = 0; intColumn < 3; intColumn++)
 			{
 				printStats.println(dblStats[intRow][intColumn]);
 			}
@@ -710,16 +719,6 @@ public class Tools
 	public static void loseScreen(Console con)
 	{
 
-	}
-
-	public static void battleConsoleClear(Console con)
-	{
-		con.setDrawColor(Color.BLACK);
-		con.fillRect(172, 564, 856, 92);
-		con.repaint();
-		con.setDrawColor(Color.WHITE);
-		con.drawString("Console:", 192, 572);
-		con.repaint();
 	}
 
 	public static void helpMenu(Console con)
@@ -851,11 +850,37 @@ public class Tools
 		}
 	}
 
+	public static void drawBattleConsole(Console con)
+	{
+		BufferedImage cBackground = con.loadImage("consoleBackground.png");
+		
+		con.drawImage(cBackground, 0, 740);
+		con.setDrawColor(Color.WHITE);
+		con.fillRect(200, 740, 1192, 4);
+		con.fillRect(200, 892, 1192, 4);
+		con.fillRect(200, 740, 4, 156);
+		con.fillRect(1392, 740, 4, 156);
+		con.repaint();
+	}
+
+	public static void battleClear(Console con)
+	{
+		BufferedImage background = con.loadImage("battleBackground.png");
+		
+		con.drawImage(background, 0, 0);
+		con.setDrawColor(Color.WHITE);
+		con.fillRect(200, 740, 1192, 4);
+		con.fillRect(200, 892, 1192, 4);
+		con.fillRect(200, 740, 4, 156);
+		con.fillRect(1392, 740, 4, 156);
+		con.repaint();
+	}
+
 	// Clear Screen Method
-	public static void clearUI(Console con)
+	public static void clearAll(Console con)
 	{
 		con.setDrawColor(Color.BLACK);
-		con.fillRect(0, 0, 1200, 800);
+		con.fillRect(0, 0, 1600, 1000);
 		con.repaint();
 	}
 }

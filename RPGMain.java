@@ -21,7 +21,7 @@ public class RPGMain
 		char chrInput = ' ';
 		char chrItem = ' ';
 		char chrMove = ' ';
-		char chrPrevMove = ' ';
+		char chrPrevMove = 'a';
 		Boolean temp = true;
 		// Font nameFont = con.loadFont("Hack-Regular.ttf", 20);
 		String strUsername;
@@ -37,7 +37,7 @@ public class RPGMain
 		while (blnQuit == false)
 		{
 			// Menu
-			Tools.clearUI(con);
+			Tools.clearAll(con);
 			intNext = Tools.menu(con, chrInput);
 			// jethroWTools.logo(con);
 
@@ -46,10 +46,10 @@ public class RPGMain
 				con.clear();
 
 				// Clear Screen
-				Tools.clearUI(con);
+				Tools.clearAll(con);
 
 				// Reset Player Stats
-				// jethroWTools.resetStats(con);
+				Tools.resetStats(con);
 
 				// Load Map
 
@@ -76,7 +76,7 @@ public class RPGMain
 				// Print Map
 				if (temp == true)
 				{
-					Tools.clearUI(con);
+					Tools.clearAll(con);
 
 					strMap = Tools.loadMap(con, strMap, intMap);
 					Tools.printMap(con, strMap);
@@ -145,14 +145,20 @@ public class RPGMain
 							
 							if (intEndBattle == 1)
 							{
-								
+								strMap[intX][intY] = "_";
 							}
 							else if (intEndBattle == 2)
 							{
+								blnLose = true;
+							}
+							else if (intEndBattle == 3)
+							{
 								blnWin = true;
 							}
+							Tools.clearAll(con);
 						}
 						
+						//Print player's updated position
 						Tools.printMap(con, strMap);
 						
 						if (chrMove == 'a' || (chrPrevMove == 'a' && chrMove != 'd'))
