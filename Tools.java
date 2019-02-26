@@ -19,61 +19,69 @@ public class Tools
 	{
 		int intNext = 1;
 		char chrLR = 'n';
-		// Font menuFont = con.loadFont("", );
-		// Font menuChoiceFont = con.loadFont("", );
-		// Font defaultFont = con.loadFont("", );
+		Font menuFont = con.loadFont("I-pixel-u.ttf", 80);
+		Font menuChoiceFont = con.loadFont("I-pixel-u.ttf", 24);
+		Font defaultFont = con.loadFont("Hack-Regular.ttf", 24);
 		// BufferedImage dragon = con.loadImage("");
-		// BufferedImage background = con.loadImage("background.png");
+		BufferedImage background = con.loadImage("battleBackground.png");
 
 		while (chrLR != ' ')
 		{
 			con.clear();
-
-			// con.setDrawFont(menuChoiceFont);
+			
+			con.drawImage(background, 0, 0);
+			con.setDrawFont(menuFont);
+			con.setDrawColor(Color.BLACK);
+			con.drawString("CAVE QUEST", 490, 390);
+			con.setDrawColor(Color.WHITE);
+			con.drawString("CAVE QUEST", 500, 400);
+			
+			con.setDrawFont(menuChoiceFont);
+			
 			con.setDrawColor(Color.RED);
 			if (intNext == 1)
 			{
-				con.drawString("Play Game", 200, 500);
+				con.drawString("Play Game", 350, 650);
 			}
 			else if (intNext == 2)
 			{
-				con.drawString("Controls", 400, 500);
+				con.drawString("Controls", 550, 650);
 			}
 			else if (intNext == 3)
 			{
-				con.drawString("Help", 600, 500);
+				con.drawString("Help", 750, 650);
 			}
 			else if (intNext == 4)
 			{
-				con.drawString("High Scores", 750, 500);
+				con.drawString("High Scores", 900, 650);
 			}
 			else if (intNext == 5)
 			{
-				con.drawString("Quit", 1000, 500);
+				con.drawString("Quit", 1150, 650);
 			}
 
 			con.setDrawColor(Color.WHITE);
 			if (intNext != 1)
 			{
-				con.drawString("Play Game", 200, 500);
+				con.drawString("Play Game", 350, 650);
 			}
 			if (intNext != 2)
 			{
-				con.drawString("Controls", 400, 500);
+				con.drawString("Controls", 550, 650);
 			}
 			if (intNext != 3)
 			{
-				con.drawString("Help", 600, 500);
+				con.drawString("Help", 750, 650);
 			}
 			if (intNext != 4)
 			{
-				con.drawString("High Scores", 750, 500);
+				con.drawString("High Scores", 900, 650);
 			}
 			if (intNext != 5)
 			{
-				con.drawString("Quit", 1000, 500);
+				con.drawString("Quit", 1150, 650);
 			}
-			con.drawString("Press [space] to select", 450, 650);
+			con.drawString("Press [space] to select", 650, 800);
 			con.repaint();
 
 			chrLR = con.getChar();
@@ -86,7 +94,7 @@ public class Tools
 				intNext = intNext + 1;
 			}
 			con.repaint();
-			// con.setDrawFont(defaultFont);
+			con.setDrawFont(defaultFont);
 		}
 		return intNext;
 	}
@@ -149,10 +157,10 @@ public class Tools
 		BufferedImage stone = con.loadImage("stone.png");
 		BufferedImage rubyOre = con.loadImage("ruby.png");
 		BufferedImage titaniumOre = con.loadImage("titanium ore.png");
+		BufferedImage ladder = con.loadImage("ladder.png");
 		// BufferedImage boss = con.loadImage("boss.png");
 		BufferedImage skeleton = con.loadImage("skeleton.png");
 		BufferedImage zombie = con.loadImage("zombie.png");
-		BufferedImage slime = con.loadImage("slime.png");
 		BufferedImage item1 = con.loadImage("gold.png");
 		BufferedImage item2 = con.loadImage("demonite.png");
 		BufferedImage item3 = con.loadImage("cobalt.png");
@@ -199,6 +207,10 @@ public class Tools
 				{
 					con.drawImage(rubyOre, intX, intY);
 				}
+				else if (strMap[intRow][intColumn].equals("l"))
+				{
+					con.drawImage(ladder, intX, intY);
+				}
 				else if (strMap[intRow][intColumn].equals("t"))
 				{
 					con.drawImage(titaniumOre, intX, intY);
@@ -207,10 +219,6 @@ public class Tools
 				{
 					con.drawImage(skeleton, intX, intY);
 				}
-				else if (strMap[intRow][intColumn].equals("v"))
-				{
-					con.drawImage(slime, intX, intY);
-				}
 				else if (strMap[intRow][intColumn].equals("X"))
 				{
 					// con.drawImage(boss, intX, intY);
@@ -218,10 +226,6 @@ public class Tools
 				else if (strMap[intRow][intColumn].equals("z"))
 				{
 					con.drawImage(zombie, intX, intY);
-				}
-				else if (strMap[intRow][intColumn].equals("c"))
-				{
-					// con.drawImage
 				}
 				else if (strMap[intRow][intColumn].equals("1"))
 				{
@@ -299,6 +303,7 @@ public class Tools
 	{
 		int intRow;
 		int intColumn;
+		int intFrame;
 		int intRand = 0;
 		int intEnemyType = 0;
 		int intBarMultiplier;
@@ -307,12 +312,16 @@ public class Tools
 		int intEndBattle = 0;
 		int intPMissingHP = 0;
 		int intEMissingHP = 0;
-		char chrMove = 'n';
+		int intNumOfStaticFrames = 0;
+		int intNumOfAttackFrames = 0;
+		char chrMove = ' ';
 		double dblStats[][] = new double[3][5];
 		Boolean blnDefend = false;
 		Boolean blnEnemyDefend = false;
-		BufferedImage enemyAttack = con.loadImage(" ");
-		BufferedImage enemyStatic = con.loadImage(" ");
+		BufferedImage[] enemyAttack = new BufferedImage[4];
+		BufferedImage[] enemyStatic = new BufferedImage[3];
+		BufferedImage[] playerAttack = new BufferedImage[4];
+		BufferedImage[] playerStatic = new BufferedImage[3];
 		BufferedImage background = con.loadImage("battleBackground.png");
 		BufferedImage pBackground = con.loadImage("playerBackground.png");
 		BufferedImage eBackground = con.loadImage("enemyBackground.png");
@@ -336,37 +345,60 @@ public class Tools
 		// Column 0 = Base Health
 		// Column 1 = Attack
 		// Column 2 = Defend
-
+		
+		// Load animation frames into arrays
+		
+		
 		if (strMap[intY][intX].equals("z") || strMap[intY][intX].equals("x")
 				|| strMap[intY][intX].equals("v") || strMap[intY][intX].equals("c"))
 		{
 			intEnemyType = 1;
+			intNumOfStaticFrames = 3;
+			intNumOfAttackFrames = 4;
+			
+			// Skeleton
 			if (strMap[intY][intX].equals("x"))
 			{
-				enemyStatic = con.loadImage("skeletonStatic.png");
-				enemyAttack = con.loadImage("skeletonAttack.png");
+				for (intFrame = 0; intFrame < 3; intFrame++)
+				{
+					enemyStatic[intFrame] = con.loadImage("skeletonStatic" + intFrame + ".png");
+				}
+				
+				for (intFrame = 0; intFrame < 4; intFrame++)
+				{
+					enemyAttack[intFrame] = con.loadImage("skeletonAttack" + intFrame + ".png");
+				}
 			}
+			// Zombie
 			else if (strMap[intY][intX].equals("z"))
 			{
-				enemyStatic = con.loadImage("zombieStatic.png");
-				enemyAttack = con.loadImage("zombieAttack.png");
-			}
-			else if (strMap[intY][intX].equals("v"))
-			{
-				enemyStatic = con.loadImage("slimeStatic1.png");
-				enemyAttack = con.loadImage("slimeAttack.png");
-			}
-			else if (strMap[intY][intX].equals("c"))
-			{
+				for (intFrame = 0; intFrame < 3; intFrame++)
+				{
+					enemyStatic[intFrame] = con.loadImage("zombieStatic" + intFrame + ".png");
+				}
 				
+				for (intFrame = 0; intFrame < 4; intFrame++)
+				{
+					enemyAttack[intFrame] = con.loadImage("zombieAttack" + intFrame + ".png");
+				}
 			}
 		}
 		else if (strMap[intY][intX].equals("X"))
 		{
 			intEnemyType = 2;
+			intNumOfStaticFrames = 2;
+			intNumOfAttackFrames = 3;
 			
-			enemyStatic = con.loadImage("bossStatic.png");
-			enemyAttack = con.loadImage("bossAttack.png");
+			// Golem boss
+			for (intFrame = 0; intFrame < 2; intFrame++)
+			{
+				enemyStatic[intFrame] = con.loadImage("golemStatic" + intFrame + ".png");
+			}
+			
+			for (intFrame = 0; intFrame < 3; intFrame++)
+			{
+				enemyAttack[intFrame] = con.loadImage("golemAttack" + intFrame + ".png");
+			}
 		}
 		
 		intEMaxHP = (int) (dblStats[intEnemyType][0]);
@@ -382,13 +414,9 @@ public class Tools
 		
 		Tools.battleClear(con);
 		
+		// Print health bar and stats
 		while (intEndBattle == 0)
-		{
-			if (intEnemyType == 1)
-			{
-				con.drawImage(enemyStatic, 1050, 300);
-			}
-			
+		{	
 			Tools.drawBattleConsole(con);
 			con.drawString("What will you do?", 216, 756);
 			con.drawString("[1] Attack", 216, 790);
@@ -416,13 +444,14 @@ public class Tools
 			
 			// Health Bars
 			con.setDrawColor(Color.GREEN);
-			con.fillRect(200, 200, 300, 40);
-			con.fillRect(1000, 200, 300, 40);
+			con.fillRect(200, 210, 300, 40);
+			con.fillRect(1000, 210, 300, 40);
 			con.repaint();
 			con.setDrawColor(Color.RED);
 			
 			intBarMultiplier = 300 / intEMaxHP;
 			
+			// Check if player or enemy is dead
 			if (dblStats[0][0] < 0.0)
 			{
 				intPMissingHP = 200;
@@ -448,10 +477,10 @@ public class Tools
 			}
 			
 			// Player Red Bar
-			con.fillRect(500 - intPMissingHP, 200, intPMissingHP, 40);
+			con.fillRect(500 - intPMissingHP, 210, intPMissingHP, 40);
 			
 			// Enemy Red Bar
-			con.fillRect(1300 - (intEMissingHP * intBarMultiplier), 200, intEMissingHP * intBarMultiplier, 40);
+			con.fillRect(1300 - (intEMissingHP * intBarMultiplier), 210, intEMissingHP * intBarMultiplier, 40);
 			con.repaint();
 			
 			if (dblStats[0][0] <= 0.0 || dblStats[intEnemyType][0] <= 0.0)
@@ -463,7 +492,7 @@ public class Tools
 					con.drawString("You have defeated the enemy.", 216, 756);
 					intEndBattle = 3;
 					con.setDrawColor(Color.RED);
-					con.fillRect(200, 200, 300, 40);
+					con.fillRect(200, 210, 300, 40);
 				}
 				else if (dblStats[0][0] <= 0.0)
 				{
@@ -471,7 +500,7 @@ public class Tools
 					intEndBattle = 2;
 					con.repaint();
 					con.setDrawColor(Color.RED);
-					con.fillRect(200, 200, 300, 40);
+					con.fillRect(200, 210, 300, 40);
 				}
 				else if (dblStats[intEnemyType][0] <= 0.0)
 				{
@@ -479,7 +508,7 @@ public class Tools
 					intEndBattle = 1;
 					con.repaint();
 					con.setDrawColor(Color.RED);
-					con.fillRect(1000, 200, 300, 40);
+					con.fillRect(1000, 210, 300, 40);
 				}
 				con.repaint();
 				con.sleep(1000);
@@ -487,14 +516,11 @@ public class Tools
 			
 			if (intEndBattle == 0)
 			{
-				while (chrMove != '1' && chrMove != '2' && chrMove != '5')
-				{
-					chrMove = con.getChar();
-					con.setDrawColor(Color.WHITE);
-				}
+				chrMove = drawStatic(con, playerStatic, enemyStatic, pBackground, eBackground, intNumOfStaticFrames);
 				
 				Tools.drawBattleConsole(con);
-								if (chrMove == '1')
+				
+				if (chrMove == '1')
 				{
 					if (blnEnemyDefend == false)
 					{
@@ -519,6 +545,10 @@ public class Tools
 				else if (chrMove == '5')
 				{
 					intEndBattle = 1;
+				}
+				else if (chrMove == '6')
+				{
+					intEndBattle = 2;
 				}
 
 				con.drawString("Press [space] to continue.", 216, 796);
@@ -559,9 +589,7 @@ public class Tools
 						blnDefend = false;
 					}
 					
-					con.drawImage(eBackground, 850, 250);
-					con.drawImage(enemyAttack, 850, 300);
-					con.repaint();
+					Tools.drawEnemyAttack(con, enemyAttack, eBackground, intNumOfAttackFrames);
 					con.sleep(1000);
 				}
 				else if ((intEnemyType == 1 && intRand == 2) || (intEnemyType == 2 && intRand > 7 && intRand <= 10))
@@ -570,9 +598,6 @@ public class Tools
 					con.drawString("The enemy chose to defend.", 216, 796);
 					con.repaint();
 				}
-				con.drawImage(eBackground, 850, 250);
-				con.drawImage(enemyStatic, 1050, 300);
-				con.repaint();
 				con.sleep(1000);
 			}
 		}
@@ -865,13 +890,67 @@ public class Tools
 		
 		con.drawImage(cBackground, 0, 740);
 		con.setDrawColor(Color.WHITE);
-		con.fillRect(200, 740, 1192, 4);
+		con.fillRect(200, 750, 1192, 4);
 		con.fillRect(200, 892, 1192, 4);
-		con.fillRect(200, 740, 4, 156);
-		con.fillRect(1392, 740, 4, 156);
+		con.fillRect(200, 750, 4, 146);
+		con.fillRect(1392, 750, 4, 146);
 		con.repaint();
 	}
-
+	
+	public static char drawStatic(Console con, BufferedImage[] playerStatic, BufferedImage[] enemyStatic,
+			BufferedImage pBackground, BufferedImage eBackground, int intNumOfFrames)
+	{
+		char chrMove = ' ';
+		int intFrame;
+		
+		while (chrMove != '1' && chrMove != '2' && chrMove != '5' && chrMove != '6')
+		{	
+			for (intFrame = 0; intFrame < intNumOfFrames && chrMove != '1' && chrMove != '2' && chrMove != '5' && chrMove != '6'; intFrame++)
+			{	
+				chrMove = con.currentChar();
+				
+				con.drawImage(eBackground, 800, 250);
+				con.repaint();
+				con.drawImage(enemyStatic[intFrame], 1000, 300);
+				con.repaint();
+				
+				con.drawImage(pBackground, 0, 250);
+				con.repaint();
+				con.drawImage(playerStatic[intFrame], 200, 300);
+				con.repaint();
+				
+				con.sleep(500);
+			}
+		}
+		
+		return chrMove;
+	}
+	
+	public static void drawPlayerAttack(Console con, BufferedImage[] playerAttack, BufferedImage pBackground, int intNumOfFrames)
+	{
+		int intFrame;
+		
+		for (intFrame = 0; intFrame < intNumOfFrames; intFrame++)
+		{			
+			con.drawImage(pBackground, 0, 250);
+			con.drawImage(playerAttack[intFrame], 200, 250);
+			con.sleep(500);
+		}
+	}
+	
+	public static void drawEnemyAttack(Console con, BufferedImage[] enemyAttack, BufferedImage eBackground, int intNumOfFrames)
+	{
+		int intFrame;
+		
+		for (intFrame = 0; intFrame < intNumOfFrames; intFrame++)
+		{			
+			con.drawImage(eBackground, 800, 250);
+			con.drawImage(enemyAttack[intFrame], 850, 300);
+			con.repaint();
+			con.sleep(500);
+		}
+	}
+	
 	public static void battleClear(Console con)
 	{
 		BufferedImage background = con.loadImage("battleBackground.png");

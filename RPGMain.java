@@ -135,8 +135,8 @@ public class RPGMain
 						}
 
 						con.repaint();
+						
 						// Player vs. Enemy
-						 
 						if (strMap[intY][intX].equals("x") || strMap[intY][intX].equals("v")
 								|| strMap[intY][intX].equals("c") || strMap[intY][intX].equals("X")
 								|| strMap[intY][intX].equals("z"))
