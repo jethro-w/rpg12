@@ -149,9 +149,10 @@ public class Tools
 		BufferedImage stone = con.loadImage("stone.png");
 		BufferedImage rubyOre = con.loadImage("ruby.png");
 		BufferedImage titaniumOre = con.loadImage("titanium ore.png");
-		// BufferedImage enemy = con.loadImage("enemy.png");
 		// BufferedImage boss = con.loadImage("boss.png");
+		BufferedImage skeleton = con.loadImage("skeleton.png");
 		BufferedImage zombie = con.loadImage("zombie.png");
+		BufferedImage slime = con.loadImage("slime.png");
 		BufferedImage item1 = con.loadImage("gold.png");
 		BufferedImage item2 = con.loadImage("demonite.png");
 		BufferedImage item3 = con.loadImage("cobalt.png");
@@ -204,11 +205,11 @@ public class Tools
 				}
 				else if (strMap[intRow][intColumn].equals("x"))
 				{
-					// con.drawImage(enemy, intX, intY);
+					con.drawImage(skeleton, intX, intY);
 				}
 				else if (strMap[intRow][intColumn].equals("v"))
 				{
-					// con.drawImage(, intX, intY);
+					con.drawImage(slime, intX, intY);
 				}
 				else if (strMap[intRow][intColumn].equals("X"))
 				{
@@ -217,6 +218,10 @@ public class Tools
 				else if (strMap[intRow][intColumn].equals("z"))
 				{
 					con.drawImage(zombie, intX, intY);
+				}
+				else if (strMap[intRow][intColumn].equals("c"))
+				{
+					// con.drawImage
 				}
 				else if (strMap[intRow][intColumn].equals("1"))
 				{
@@ -306,8 +311,8 @@ public class Tools
 		double dblStats[][] = new double[3][5];
 		Boolean blnDefend = false;
 		Boolean blnEnemyDefend = false;
-		BufferedImage enemyAttack = con.loadImage("skeletonAttack.png");
-		BufferedImage enemyStatic = con.loadImage("skeletonStatic.png");
+		BufferedImage enemyAttack = con.loadImage(" ");
+		BufferedImage enemyStatic = con.loadImage(" ");
 		BufferedImage background = con.loadImage("battleBackground.png");
 		BufferedImage pBackground = con.loadImage("playerBackground.png");
 		BufferedImage eBackground = con.loadImage("enemyBackground.png");
@@ -338,17 +343,18 @@ public class Tools
 			intEnemyType = 1;
 			if (strMap[intY][intX].equals("x"))
 			{
-				//enemyStatic = con.loadImage("skeletonStatic.png");
-				//enemyAttack = con.loadImage("skeletonAttack.png");
+				enemyStatic = con.loadImage("skeletonStatic.png");
+				enemyAttack = con.loadImage("skeletonAttack.png");
 			}
 			else if (strMap[intY][intX].equals("z"))
 			{
-				//enemyStatic = con.loadImage("zombieStatic.png");
-				//enemyAttack = con.loadImage("zombieAttack.png");
+				enemyStatic = con.loadImage("zombieStatic.png");
+				enemyAttack = con.loadImage("zombieAttack.png");
 			}
 			else if (strMap[intY][intX].equals("v"))
 			{
-				
+				enemyStatic = con.loadImage("slimeStatic1.png");
+				enemyAttack = con.loadImage("slimeAttack.png");
 			}
 			else if (strMap[intY][intX].equals("c"))
 			{
@@ -481,15 +487,14 @@ public class Tools
 			
 			if (intEndBattle == 0)
 			{
-				while (chrMove != '1' && chrMove != '2' && chrMove != '3' && chrMove != '4' && chrMove != '5')
+				while (chrMove != '1' && chrMove != '2' && chrMove != '5')
 				{
 					chrMove = con.getChar();
 					con.setDrawColor(Color.WHITE);
 				}
 				
 				Tools.drawBattleConsole(con);
-				
-				if (chrMove == '1')
+								if (chrMove == '1')
 				{
 					if (blnEnemyDefend == false)
 					{
@@ -555,17 +560,18 @@ public class Tools
 					}
 					
 					con.drawImage(eBackground, 850, 250);
-					con.drawImage(enemyAttack, 1050, 300);
+					con.drawImage(enemyAttack, 850, 300);
+					con.repaint();
+					con.sleep(1000);
 				}
 				else if ((intEnemyType == 1 && intRand == 2) || (intEnemyType == 2 && intRand > 7 && intRand <= 10))
 				{
 					blnEnemyDefend = true;
 					con.drawString("The enemy chose to defend.", 216, 796);
 					con.repaint();
-					
-					con.drawImage(eBackground, 850, 250);
-					con.drawImage(enemyStatic, 1050, 300);
 				}
+				con.drawImage(eBackground, 850, 250);
+				con.drawImage(enemyStatic, 1050, 300);
 				con.repaint();
 				con.sleep(1000);
 			}
@@ -573,11 +579,14 @@ public class Tools
 		
 		
 		// Print Stats Back into playerStats.txt (only player stats change)
-		dblStats[1][0] = 50;
-
-		for (intColumn = 0; intColumn < 3; intColumn++)
+		dblStats[1][0] = 150;
+		
+		for (intRow = 0; intRow < 3; intRow++)
 		{
-			statsOut.println(dblStats[0][intColumn]);
+			for (intColumn = 0; intColumn < 3; intColumn++)
+			{
+				statsOut.println(dblStats[intRow][intColumn]);
+			}
 		}
 		
 		statsIn.close();

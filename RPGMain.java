@@ -145,7 +145,7 @@ public class RPGMain
 							
 							if (intEndBattle == 1)
 							{
-								strMap[intX][intY] = "_";
+								strMap[intY][intX] = "_";
 							}
 							else if (intEndBattle == 2)
 							{
