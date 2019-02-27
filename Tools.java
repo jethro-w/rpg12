@@ -1,7 +1,6 @@
 import arc.*;
 import java.awt.*;
 import java.awt.image.*;
-import java.awt.Color.*;
 
 public class Tools
 {
@@ -10,31 +9,46 @@ public class Tools
 	{
 		BufferedImage logo = con.loadImage("logo.png");
 
-		con.drawImage(logo, 1150, 750);
+		con.drawImage(logo, 1500, 900);
 		con.repaint();
 	}
-
+		
 	// Menu
-	public static int menu(Console con, char chrInput)
+	public static int menu(Console con)
 	{
 		int intNext = 1;
+		int intFrame = 0;
 		char chrLR = 'n';
-		Font menuFont = con.loadFont("I-pixel-u.ttf", 80);
-		Font menuChoiceFont = con.loadFont("I-pixel-u.ttf", 24);
+		Font menuFont = con.loadFont("I-pixel-u.ttf", 150);
+		Font menuChoiceFont = con.loadFont("I-pixel-u.ttf", 40);
 		Font defaultFont = con.loadFont("Hack-Regular.ttf", 24);
-		// BufferedImage dragon = con.loadImage("");
+		BufferedImage[] enemyStatic = new BufferedImage[2];
 		BufferedImage background = con.loadImage("battleBackground.png");
-
+		
+		for (intFrame = 0; intFrame < 2; intFrame++)
+		{
+			enemyStatic[intFrame] = con.loadImage("golemStatic" + intFrame + ".png");
+		}
+		
 		while (chrLR != ' ')
 		{
 			con.clear();
 			
+			if (intFrame == 2)
+			{
+				intFrame = 0;
+			}
+			
 			con.drawImage(background, 0, 0);
+			Tools.logo(con);
+			con.drawImage(enemyStatic[intFrame], 500, 50);
+			intFrame++;
+			
 			con.setDrawFont(menuFont);
 			con.setDrawColor(Color.BLACK);
-			con.drawString("CAVE QUEST", 490, 390);
+			con.drawString("CAVE QUEST", 240, 420);
 			con.setDrawColor(Color.WHITE);
-			con.drawString("CAVE QUEST", 500, 400);
+			con.drawString("CAVE QUEST", 250, 430);
 			
 			con.setDrawFont(menuChoiceFont);
 			
@@ -45,17 +59,15 @@ public class Tools
 			}
 			else if (intNext == 2)
 			{
-				con.drawString("Controls", 550, 650);
+				con.drawString("Controls", 750, 650);
 			}
+			/*
 			else if (intNext == 3)
-			{
-				con.drawString("Help", 750, 650);
-			}
-			else if (intNext == 4)
 			{
 				con.drawString("High Scores", 900, 650);
 			}
-			else if (intNext == 5)
+			*/
+			else if (intNext == 3)
 			{
 				con.drawString("Quit", 1150, 650);
 			}
@@ -67,29 +79,28 @@ public class Tools
 			}
 			if (intNext != 2)
 			{
-				con.drawString("Controls", 550, 650);
+				con.drawString("Controls", 750, 650);
 			}
+			/*
 			if (intNext != 3)
-			{
-				con.drawString("Help", 750, 650);
-			}
-			if (intNext != 4)
 			{
 				con.drawString("High Scores", 900, 650);
 			}
-			if (intNext != 5)
+			*/
+			if (intNext != 3)
 			{
 				con.drawString("Quit", 1150, 650);
 			}
-			con.drawString("Press [space] to select", 650, 800);
+			con.drawString("Press [space] to select", 575, 800);
 			con.repaint();
 
 			chrLR = con.getChar();
+			
 			if (chrLR == 'a' && intNext != 1)
 			{
 				intNext = intNext - 1;
 			}
-			else if (chrLR == 'd' && intNext != 5)
+			else if (chrLR == 'd' && intNext != 3)
 			{
 				intNext = intNext + 1;
 			}
@@ -98,7 +109,102 @@ public class Tools
 		}
 		return intNext;
 	}
-
+	
+	public static String askForUsername(Console con)
+	{
+		Font bigFont = con.loadFont("I-pixel-u.ttf", 150);
+		Font smallFont = con.loadFont("I-pixel-u.ttf", 60);
+		Font defaultFont = con.loadFont("Hack-Regular.ttf", 24);
+		char chrPart;
+		String strPart;
+		String strUsername = "";
+		int intCount;
+		
+		con.setDrawColor(Color.WHITE);
+		con.setDrawFont(smallFont);
+		con.drawString("Enter your username (3 characters)", 250, 300);
+		con.repaint();
+		
+		con.setDrawFont(bigFont);
+		
+		for (intCount = 0; intCount < 3; intCount++)
+		{
+			chrPart = con.getChar();
+			strPart = String.valueOf(chrPart);
+			strUsername = strUsername + strPart;
+			
+			con.drawString(strPart, (200 * intCount) + 525, 400);
+			con.repaint();
+		}
+		
+		con.sleep(1000);
+		
+		con.setDrawFont(defaultFont);
+		
+		return strUsername;
+	}
+	
+	public static int askForMap(Console con)
+	{
+		Font bigFont = con.loadFont("I-pixel-u.ttf", 60);
+		Font smallFont = con.loadFont("I-pixel-u.ttf", 50);
+		Font defaultFont = con.loadFont("Hack-Regular.ttf", 24);
+		char chrMap = 'n';
+		int intMap = 1;
+		
+		while (chrMap != ' ' && chrMap != 'q')
+		{
+			con.setDrawColor(Color.WHITE);
+			con.setDrawFont(bigFont);
+			con.drawString("Which map would you like to play on?", 200, 300);
+			
+			con.setDrawFont(smallFont);
+			if (intMap == 1)
+			{
+				con.fillRect(275, 440, 300, 110);
+				con.setDrawColor(Color.BLACK);
+				con.fillRect(825, 440, 300, 110);
+				con.setDrawColor(Color.WHITE);
+				con.drawString("Map Two", 875, 450);
+				con.setDrawColor(Color.BLACK);
+				con.drawString("Map One", 325, 450);
+			}
+			else if (intMap == 2)
+			{
+				con.fillRect(825, 440, 300, 110);
+				con.setDrawColor(Color.BLACK);
+				con.fillRect(275, 440, 300, 110);
+				con.setDrawColor(Color.WHITE);
+				con.drawString("Map One", 325, 450);
+				con.setDrawColor(Color.BLACK);
+				con.drawString("Map Two", 875, 450);
+			}
+			con.setDrawColor(Color.WHITE);
+			con.drawString("Press [Space] to select or [Q] to return to main menu.", 150, 650);
+			
+			con.repaint();
+			
+			chrMap = con.getChar();
+			
+			if (chrMap == 'a' && intMap != 1)
+			{
+				intMap--;
+			}
+			else if (chrMap == 'd' && intMap != 2)
+			{
+				intMap++;
+			}
+			else if (chrMap == 'q')
+			{
+				intMap = 0;
+			}
+		}
+		
+		con.setDrawFont(defaultFont);
+		
+		return intMap;
+	}
+	
 	// Load Map to array
 	public static String[][] loadMap(Console con, String[][] strMap, int intMap)
 	{
@@ -141,7 +247,7 @@ public class Tools
 	}
 
 	// Print Map to Screen
-	public static void printMap(Console con, String strMap[][])
+	public static void printMap(Console con, String strMap[][], int intPosX, int intPosY)
 	{
 		int intRow;
 		int intColumn;
@@ -158,14 +264,15 @@ public class Tools
 		BufferedImage rubyOre = con.loadImage("ruby.png");
 		BufferedImage titaniumOre = con.loadImage("titanium ore.png");
 		BufferedImage ladder = con.loadImage("ladder.png");
-		// BufferedImage boss = con.loadImage("boss.png");
+		BufferedImage lava = con.loadImage("lava.png");
+		BufferedImage boss = con.loadImage("golem.png");
 		BufferedImage skeleton = con.loadImage("skeleton.png");
 		BufferedImage zombie = con.loadImage("zombie.png");
 		BufferedImage item1 = con.loadImage("gold.png");
 		BufferedImage item2 = con.loadImage("demonite.png");
 		BufferedImage item3 = con.loadImage("cobalt.png");
 		BufferedImage item4 = con.loadImage("mythril.png");
-
+		
 		for (intRow = 0; intRow < 20; intRow++)
 		{
 			intX = 200;
@@ -221,11 +328,15 @@ public class Tools
 				}
 				else if (strMap[intRow][intColumn].equals("X"))
 				{
-					// con.drawImage(boss, intX, intY);
+					con.drawImage(boss, intX, intY);
 				}
 				else if (strMap[intRow][intColumn].equals("z"))
 				{
 					con.drawImage(zombie, intX, intY);
+				}
+				else if (strMap[intRow][intColumn].equals("*"))
+				{
+					con.drawImage(lava, intX, intY);
 				}
 				else if (strMap[intRow][intColumn].equals("1"))
 				{
@@ -250,52 +361,77 @@ public class Tools
 			}
 			intY = intY + 40;
 		}
-		con.repaint();
+		Tools.drawFog(con, intPosX, intPosY);
 	}
-
-	// Draw Console
-	public static void drawGameConsole(Console con)
+	
+	public static void drawFog(Console con, int intX, int intY)
 	{
-		Font defaultFont = con.loadFont("Hack-Regular.ttf", 15);
-
-		con.setDrawFont(defaultFont);
-		con.setDrawColor(Color.BLACK);
-		con.fillRect(850, 100, 300, 600);
-		con.setDrawColor(Color.WHITE);
-		con.fillRect(1050, 100, 4, 800);
-		con.fillRect(1050, 100, 300, 4);
-		con.fillRect(1050, 896, 300, 4);
-		con.fillRect(1346, 100, 4, 800);
-		con.drawString("Console:", 1062, 112);
-
+		BufferedImage fog = con.loadImage("fog1.png");
+		
+		con.drawImage(fog, (intX * 40) + 160, (intY * 40) + 60);
 		con.repaint();
+		
+		con.setDrawColor(Color.BLACK);
+		con.fillRect(200, 100, (intX - 1) * 40, 800);
+		con.fillRect(200, 100, 800, (intY - 1) * 40);
+		con.fillRect(((intX + 2) * 40) + 200, 100, 800 - ((intX + 2) * 40), 800);
+		con.fillRect(200, ((intY + 2) * 40) + 100, 800, 800 - ((intY + 2) * 40));
+		con.repaint();
+		
+		con.setDrawColor(Color.WHITE);
 	}
-
-	public static void printStats(Console con)
+	
+	// Draw Console
+	public static void drawCurrentStats(Console con, int intScore, Boolean bln250HP)
 	{
 		int intRow;
 		int intColumn;
-		Font defaultFont = con.loadFont("Hack-Regular.ttf", 15);
-		double dblStats[][] = new double[3][5];
+		Font drawFont = con.loadFont("I-pixel-u.ttf", 20);
+		Font defaultFont = con.loadFont("Hack-Regular.ttf", 24);
+		double dblStats[][] = new double[3][3];
 		TextInputFile playerStats = new TextInputFile("playerStats.txt");
 
 		for (intRow = 0; intRow < 3; intRow++)
 		{
-			for (intColumn = 0; intColumn < 5; intColumn++)
+			for (intColumn = 0; intColumn < 3; intColumn++)
 			{
 				dblStats[intRow][intColumn] = playerStats.readDouble();
 			}
 		}
-		Tools.drawGameConsole(con);
-		con.setDrawFont(defaultFont);
+		
+		con.setDrawFont(drawFont);
+		con.setDrawColor(Color.BLACK);
+		con.fillRect(1050, 100, 300, 800);
 		con.setDrawColor(Color.WHITE);
-		con.drawString("Your stats:", 862, 136);
-		con.drawString("Current HP: " + dblStats[0][0] + "/200", 862, 160);
-		con.drawString("Attack: " + dblStats[0][1], 862, 184);
-		con.drawString("Defense: " + dblStats[0][2], 862, 208);
-		con.drawString("Buff Power: " + dblStats[0][3], 862, 232);
-		con.drawString("Healing: " + dblStats[0][4], 862, 256);
+		con.fillRect(1050, 96, 4, 808);
+		con.fillRect(1050, 96, 300, 4);
+		con.fillRect(1050, 904, 300, 4);
+		con.fillRect(1346, 96, 4, 808);
+		con.fillRect(196, 96, 4, 808);
+		con.fillRect(196, 96, 808, 4);
+		con.fillRect(1000, 96, 4, 808);
+		con.fillRect(196, 900, 808, 4);
+		
+		con.drawString("Current Score: " + intScore, 1062, 112);
+		con.drawString("Current Stats:", 1062, 1136);
+		con.setDrawFont(drawFont);
+		con.setDrawColor(Color.WHITE);
+		
+		if (bln250HP == false)
+		{
+			con.drawString("Current HP: " + dblStats[0][0] + "/200", 1062, 160);
+		}
+		else
+		{
+			con.drawString("Current HP: " + dblStats[0][0] + "/250", 1062, 160);
+		}
+		con.drawString("Attack: " + dblStats[0][1], 1062, 184);
+		
 		con.repaint();
+		
+		con.setDrawFont(defaultFont);
+		
+		playerStats.close();
 	}
 
 	// Battle
@@ -347,7 +483,15 @@ public class Tools
 		// Column 2 = Defend
 		
 		// Load animation frames into arrays
+		for (intFrame = 0; intFrame < 2; intFrame++)
+		{
+			playerStatic[intFrame] = con.loadImage("playerStatic" + intFrame + ".png");
+		}
 		
+		for (intFrame = 0; intFrame < 3; intFrame++)
+		{
+			playerAttack[intFrame] = con.loadImage("playerAttack" + intFrame + ".png");
+		}
 		
 		if (strMap[intY][intX].equals("z") || strMap[intY][intX].equals("x")
 				|| strMap[intY][intX].equals("v") || strMap[intY][intX].equals("c"))
@@ -438,18 +582,18 @@ public class Tools
 			}
 			else
 			{
-				con.drawString("Health: " + (int) dblStats[intEnemyType][0] + " / " + intEMaxHP, 1000, 170);
+				con.drawString("Health: " + (int) dblStats[intEnemyType][0] + " / " + intEMaxHP, 900, 170);
 			}
 			con.repaint();
 			
 			// Health Bars
 			con.setDrawColor(Color.GREEN);
-			con.fillRect(200, 210, 300, 40);
-			con.fillRect(1000, 210, 300, 40);
+			con.fillRect(200, 210, 400, 40);
+			con.fillRect(900, 210, 400, 40);
 			con.repaint();
 			con.setDrawColor(Color.RED);
 			
-			intBarMultiplier = 300 / intEMaxHP;
+			intBarMultiplier = 400 / intEMaxHP;
 			
 			// Check if player or enemy is dead
 			if (dblStats[0][0] < 0.0)
@@ -477,7 +621,7 @@ public class Tools
 			}
 			
 			// Player Red Bar
-			con.fillRect(500 - intPMissingHP, 210, intPMissingHP, 40);
+			con.fillRect(600 - intPMissingHP, 210, intPMissingHP, 40);
 			
 			// Enemy Red Bar
 			con.fillRect(1300 - (intEMissingHP * intBarMultiplier), 210, intEMissingHP * intBarMultiplier, 40);
@@ -492,7 +636,7 @@ public class Tools
 					con.drawString("You have defeated the enemy.", 216, 756);
 					intEndBattle = 3;
 					con.setDrawColor(Color.RED);
-					con.fillRect(200, 210, 300, 40);
+					con.fillRect(200, 210, 400, 40);
 				}
 				else if (dblStats[0][0] <= 0.0)
 				{
@@ -500,7 +644,7 @@ public class Tools
 					intEndBattle = 2;
 					con.repaint();
 					con.setDrawColor(Color.RED);
-					con.fillRect(200, 210, 300, 40);
+					con.fillRect(200, 210, 400, 40);
 				}
 				else if (dblStats[intEnemyType][0] <= 0.0)
 				{
@@ -508,7 +652,7 @@ public class Tools
 					intEndBattle = 1;
 					con.repaint();
 					con.setDrawColor(Color.RED);
-					con.fillRect(1000, 210, 300, 40);
+					con.fillRect(900, 210, 400, 40);
 				}
 				con.repaint();
 				con.sleep(1000);
@@ -516,28 +660,19 @@ public class Tools
 			
 			if (intEndBattle == 0)
 			{
-				chrMove = drawStatic(con, playerStatic, enemyStatic, pBackground, eBackground, intNumOfStaticFrames);
+				chrMove = drawStatic(con, playerStatic, enemyStatic, pBackground, eBackground,
+						intNumOfStaticFrames, intEnemyType, 2);
 				
 				Tools.drawBattleConsole(con);
 				
+				// Player's Turn
 				if (chrMove == '1')
-				{
-					if (blnEnemyDefend == false)
-					{
-						dblStats[intEnemyType][0] = dblStats[intEnemyType][0] - dblStats[0][1];
-					}
-					else if (blnEnemyDefend == true)
-					{
-						dblStats[intEnemyType][0] = dblStats[intEnemyType][0] - dblStats[0][1]
-								+ dblStats[intEnemyType][2];
-						blnEnemyDefend = false;
-					}
+				{					
 					con.drawString("You chose to attack.", 216, 756);
 					con.repaint();
 				}
 				else if (chrMove == '2')
 				{
-					blnDefend = true;
 					con.drawString("You chose to defend.", 216, 756);
 					con.repaint();
 				}
@@ -550,35 +685,67 @@ public class Tools
 				{
 					intEndBattle = 2;
 				}
-
-				con.drawString("Press [space] to continue.", 216, 796);
-				con.repaint();
-
-				while (chrMove != ' ')
-				{
-					chrMove = con.getChar();
-				}
 				
 				// Enemy's Turn
 				// Plain Enemy
 				if (intEnemyType == 1)
 				{
 					intRand = (int) (Math.random() * 2) + 1;
+					
+					if (intRand == 2)
+					{
+						blnEnemyDefend = true;
+					}
 				}
 				// Boss
 				else if (intEnemyType == 2)
 				{
 					intRand = (int) (Math.random() * 10) + 1;
+					
+					if (intRand > 7 && intRand <= 10)
+					{
+						blnEnemyDefend = true;
+					}
 				}
+
+				con.drawString("Press any key to continue.", 216, 796);
+				con.repaint();
+
+				con.getChar();
 				
 				Tools.drawBattleConsole(con);
 				
-				// 50/50 for normal enemy and 70/30 for boss
+				// Calculate Fight Damage
 				if ((intEnemyType == 1 && intRand == 1) || (intEnemyType == 2 && intRand >= 1 && intRand <= 7))
 				{
-					con.drawString("The enemy chose to attack.", 216, 796);
+					con.drawString("The enemy chose to attack.", 216, 756);
 					con.repaint();
 					
+					con.sleep(1000);
+				}
+				else if ((intEnemyType == 1 && intRand == 2) || (intEnemyType == 2 && intRand > 7 && intRand <= 10))
+				{
+					con.drawString("The enemy chose to defend.", 216, 756);
+					con.repaint();
+				}
+				
+				// Animate Attacks
+				if (chrMove == '1')
+				{
+					if (blnEnemyDefend == false)
+					{
+						dblStats[intEnemyType][0] = dblStats[intEnemyType][0] - dblStats[0][1];
+					}
+					else if (blnEnemyDefend == true)
+					{
+						dblStats[intEnemyType][0] = dblStats[intEnemyType][0] - dblStats[0][1]
+								+ dblStats[intEnemyType][2];
+						blnEnemyDefend = false;
+					}
+					Tools.drawPlayerAttack(con, playerAttack, pBackground, 3);
+				}
+				if ((intEnemyType == 1 && intRand == 1) || (intEnemyType == 2 && intRand >= 1 && intRand <= 7))
+				{
 					if (blnDefend == false)
 					{
 						dblStats[0][0] = dblStats[0][0] - dblStats[intEnemyType][1];
@@ -589,14 +756,7 @@ public class Tools
 						blnDefend = false;
 					}
 					
-					Tools.drawEnemyAttack(con, enemyAttack, eBackground, intNumOfAttackFrames);
-					con.sleep(1000);
-				}
-				else if ((intEnemyType == 1 && intRand == 2) || (intEnemyType == 2 && intRand > 7 && intRand <= 10))
-				{
-					blnEnemyDefend = true;
-					con.drawString("The enemy chose to defend.", 216, 796);
-					con.repaint();
+					Tools.drawEnemyAttack(con, enemyAttack, eBackground, intNumOfAttackFrames, intEnemyType);
 				}
 				con.sleep(1000);
 			}
@@ -620,18 +780,21 @@ public class Tools
 		return intEndBattle;
 	}
 
-	public static void items(Console con, String strMap[][], int intY, int intX)
+	public static boolean items(Console con, String strMap[][], int intX, int intY, int intScore)
 	{
 		int intRow;
 		int intColumn;
+		boolean bln250HP = false;
 		double dblStats[][] = new double[3][5];
+		Font drawFont = con.loadFont("I-pixel-u.ttf", 20);
+		Font defaultFont = con.loadFont("Hack-Regular.ttf", 24);
 		TextInputFile statsIn = new TextInputFile("playerStats.txt");
 		TextOutputFile statsOut = new TextOutputFile("playerStats.txt");
 
 		// Read player stats from playerStats.txt (items affect player stats)
 		for (intRow = 0; intRow < 3; intRow++)
 		{
-			for (intColumn = 0; intColumn < 5; intColumn++)
+			for (intColumn = 0; intColumn < 3; intColumn++)
 			{
 				dblStats[intRow][intColumn] = statsIn.readDouble();
 			}
@@ -641,81 +804,97 @@ public class Tools
 		// Column 0 = Health
 		// Column 1 = Attack
 		// Column 2 = Defend
-		// Column 3 = Buff
-		// Column 4 = Heal
-
-		Tools.drawGameConsole(con);
-		// Double Edged Sword
+		
+		con.setDrawFont(drawFont);
+		// Gold Nugget
 		if (strMap[intY][intX].equals("1"))
 		{
-
+			con.drawString("Found some gold...", 1062, 208);
+			con.drawString("Not very useful though.", 1062, 232);
 		}
-		// Potion of Power
+		// Demonite Gem
 		else if (strMap[intY][intX].equals("2"))
 		{
-
+			con.drawString("Found a demonite gem!", 1062, 208);
+			con.drawString("Stat boost: +15 damage", 1062, 232);
+			
+			dblStats[0][1] = dblStats[0][1] + 15;
 		}
-		// Cast Iron Armour
+		// Mythril Gem
 		else if (strMap[intY][intX].equals("3"))
 		{
-
+			con.drawString("Found a mythril gem!", 1062, 208);
+			con.drawString("Stat boost: + 50 hp", 1062, 232);
+			
+			dblStats[0][0] = dblStats[0][0] + 50;
+			
+			if (dblStats[0][0] > 200)
+			{
+				bln250HP = true;
+			}
 		}
-		// Spellbook of Healing
+		// Cobalt Gem
 		else if (strMap[intY][intX].equals("4"))
 		{
-
+			con.drawString("Found a cobalt gem!", 1062, 208);
+			con.drawString("Stat boost: + 10 defense", 1062, 232);
+			
+			dblStats[0][2] = dblStats[0][2] + 10;
 		}
 		con.repaint();
-		strMap[intY][intX] = "g";
 
 		for (intRow = 0; intRow < 3; intRow++)
 		{
-			for (intColumn = 0; intColumn < 5; intColumn++)
+			for (intColumn = 0; intColumn < 3; intColumn++)
 			{
 				statsOut.println(dblStats[intRow][intColumn]);
 			}
 		}
+		
+		Tools.drawCurrentStats(con, intScore, bln250HP);
+		con.setDrawFont(defaultFont);
+		
+		return bln250HP;
 	}
-
-	public static void waterDamage(Console con, char chrClan)
+	
+	public static void lavaDamage(Console con)
 	{
 		int intRow;
 		int intColumn;
-		double dblStats[][] = new double[3][5];
+		double dblStats[][] = new double[3][3];
+		Font drawFont = con.loadFont("I-pixel-u.ttf", 20);
+		Font defaultFont = con.loadFont("Hack-Regular.ttf", 24);
 		TextInputFile playerStats = new TextInputFile("playerStats.txt");
 		TextOutputFile printStats = new TextOutputFile("playerStats.txt");
 
 		// Read player stats from playerStats.txt
 		for (intRow = 0; intRow < 3; intRow++)
 		{
-			for (intColumn = 0; intColumn < 5; intColumn++)
+			for (intColumn = 0; intColumn < 3; intColumn++)
 			{
 				dblStats[intRow][intColumn] = playerStats.readDouble();
 			}
 		}
-
-		if (chrClan == 'f')
-		{
-			dblStats[0][0] = dblStats[0][0] - 10;
-			con.drawString("Ouch...that did 5 damage.", 862, 184);
-			con.repaint();
-		}
-		else if (chrClan == 'e')
-		{
-			dblStats[0][0] = dblStats[0][0] - 5;
-			con.drawString("Ouch...that did 5 damage.", 862, 184);
-			con.repaint();
-		}
-
+		playerStats.close();
+		
+		con.setDrawFont(drawFont);
+		
+		dblStats[0][0] = dblStats[0][0] - 10;
+		con.drawString("Ouch...that did 10 damage.", 1062, 208);
+		con.repaint();
+		
+		con.setDrawFont(defaultFont);
+		
 		for (intRow = 0; intRow < 3; intRow++)
 		{
-			for (intColumn = 0; intColumn < 5; intColumn++)
+			for (intColumn = 0; intColumn < 3; intColumn++)
 			{
 				printStats.println(dblStats[intRow][intColumn]);
 			}
 		}
+		printStats.close();
 	}
-
+	
 	// Resets Player Stats in case they were changed from buffs/items
 	public static void resetStats(Console con)
 	{
@@ -741,18 +920,57 @@ public class Tools
 				printStats.println(dblStats[intRow][intColumn]);
 			}
 		}
+		
+		printStats.close();
 	}
 
 	// Victory Screen
 	public static void victoryScreen(Console con)
 	{
-
+		Tools.clearAll(con);
+		
+		BufferedImage confettiRight = con.loadImage("confettiFlipped.png");
+		BufferedImage confettiLeft = con.loadImage("confetti.png");
+		Font drawFont = con.loadFont("I-pixel-u.ttf", 150);
+		Font smallFont = con.loadFont("I-pixel-u.ttf", 50);
+		
+		con.setDrawFont(drawFont);
+		con.setDrawColor(Color.WHITE);
+		
+		con.drawImage(confettiLeft, 200, 300);
+		con.drawImage(confettiRight, 1000, 300);
+		con.drawString("Congratulations", 250, 350);
+		
+		con.setDrawFont(smallFont);
+		
+		con.drawString("Press any key to return to the main menu", 275, 600);
+		con.repaint();
+		
+		con.getChar();
 	}
 
 	// Lose Screen
 	public static void loseScreen(Console con)
 	{
-
+		Tools.clearAll(con);
+		
+		BufferedImage skull = con.loadImage("skull.png");
+		Font drawFont = con.loadFont("I-pixel-u.ttf", 150);
+		Font smallFont = con.loadFont("I-pixel-u.ttf", 50);
+		
+		con.setDrawFont(drawFont);
+		con.setDrawColor(Color.RED);
+		
+		con.drawImage(skull, 500, 150);
+		con.drawString("YOU DIED", 350, 400);
+		
+		con.setDrawFont(smallFont);
+		con.setDrawColor(Color.WHITE);
+		
+		con.drawString("Press any key to return to the main menu", 275, 600);
+		con.repaint();
+		
+		con.getChar();
 	}
 
 	public static void helpMenu(Console con)
@@ -781,16 +999,53 @@ public class Tools
 	// Controls Menu
 	public static void controlMenu(Console con)
 	{
+		Tools.clearAll(con);
+		
+		Font titleFont = con.loadFont("I-pixel-u.ttf", 50);
+		Font drawFont = con.loadFont("I-pixel-u.ttf", 30);
+		Font defaultFont = con.loadFont("Hack-Regular.ttf", 24);
+		
+		con.setDrawFont(titleFont);
+	    con.setDrawColor(Color.WHITE);
+	    con.drawString("Controls Menu", 100, 75);
+	    con.setDrawFont(drawFont);
+	    con.drawString("Left", 300, 350);
+	    con.drawString("Down", 435, 500);
+	    con.drawString("Up", 450, 225);
+	    con.drawString("Right", 575, 350);
+	    con.drawString("Select", 925, 500);
+	    con.drawString("Press any key to return to the main menu.", 450, 800);
+	    con.fillRect(300, 400, 100, 100);
+	    con.fillRect(425, 400, 100, 100);
+	    con.fillRect(425, 275, 100, 100);
+	    con.fillRect(550, 400, 100, 100);
+	    con.fillRect(800, 400, 400, 100);
+	    con.repaint();
 
+	    con.setDrawColor(Color.BLACK);
+	    con.setDrawFont(titleFont);
+	    con.drawString("W", 450, 300);
+	    con.drawString("A", 325, 425);
+	    con.drawString("S", 450, 425);
+	    con.drawString("D", 575, 425);
+	    con.drawString("[Space Bar]", 825, 425);
+
+	    con.repaint();
+	    
+	    con.setDrawFont(defaultFont);
+	    
+	    con.getChar();
 	}
 
 	// Highscores Screen
 	public static void highscores(Console con)
 	{
+		Tools.clearAll(con);
+		
 		TextInputFile highscores = new TextInputFile("highscores.txt");
-		Font titleFont = con.loadFont("alagard.ttf", 50);
-		Font drawFont = con.loadFont("alagard.ttf", 30);
-		Font _drawFont = con.loadFont("alagard.ttf", 20);
+		Font titleFont = con.loadFont("I-pixel-u.ttf", 50);
+		Font drawFont = con.loadFont("I-pixel-u.ttf", 30);
+		Font _drawFont = con.loadFont("I-pixel-u.ttf", 20);
 		String strPlace[] = new String[10];
 		int intNumUsers = 0;
 		int intCountA;
@@ -858,30 +1113,11 @@ public class Tools
 		con.setDrawFont(drawFont);
 		con.drawString("Username", 150, 150);
 		con.drawString("Score", 600, 150);
-		con.drawString("Clan", 1000, 150);
 		con.setDrawFont(_drawFont);
 		con.drawString("Press any key to return to the main menu.", 100, 700);
 		con.setDrawFont(drawFont);
-		for (intCountA = 0; intCountA < intNumUsers; intCountA++)
-		{
-			con.drawString(strPlace[intCountA] + ".", intX, intY);
-			con.drawString(strHighscores[intCountA][0], intX + 50, intY);
-			con.drawString(strHighscores[intCountA][1], intX + 500, intY);
-			if (strHighscores[intCountA][2].equals("f"))
-			{
-				con.drawString("Fire", intX + 900, intY);
-			}
-			else if (strHighscores[intCountA][2].equals("e"))
-			{
-				con.drawString("Earth", intX + 900, intY);
-			}
-			else if (strHighscores[intCountA][2].equals("w"))
-			{
-				con.drawString("Water", intX + 900, intY);
-			}
-			con.repaint();
-			intY = intY + 50;
-		}
+		
+		con.getChar();
 	}
 
 	public static void drawBattleConsole(Console con)
@@ -898,10 +1134,11 @@ public class Tools
 	}
 	
 	public static char drawStatic(Console con, BufferedImage[] playerStatic, BufferedImage[] enemyStatic,
-			BufferedImage pBackground, BufferedImage eBackground, int intNumOfFrames)
+			BufferedImage pBackground, BufferedImage eBackground, int intNumOfFrames, int intEnemyType, int intMaxPlayerFrames)
 	{
 		char chrMove = ' ';
 		int intFrame;
+		int intFrame2 = 0;
 		
 		while (chrMove != '1' && chrMove != '2' && chrMove != '5' && chrMove != '6')
 		{	
@@ -909,15 +1146,31 @@ public class Tools
 			{	
 				chrMove = con.currentChar();
 				
-				con.drawImage(eBackground, 800, 250);
-				con.repaint();
-				con.drawImage(enemyStatic[intFrame], 1000, 300);
-				con.repaint();
+				if (intEnemyType == 1)
+				{
+					con.drawImage(eBackground, 800, 250);
+					con.repaint();
+					con.drawImage(enemyStatic[intFrame], 1000, 300);
+					con.repaint();
+				}
+				else if (intEnemyType == 2)
+				{
+					con.drawImage(eBackground, 800, 250);
+					con.repaint();
+					con.drawImage(enemyStatic[intFrame], 800, 250);
+					con.repaint();
+				}
 				
 				con.drawImage(pBackground, 0, 250);
 				con.repaint();
-				con.drawImage(playerStatic[intFrame], 200, 300);
+				con.drawImage(playerStatic[intFrame2], 200, 300);
 				con.repaint();
+				intFrame2++;
+				
+				if (intFrame2 == intMaxPlayerFrames)
+				{
+					intFrame2 = 0;
+				}
 				
 				con.sleep(500);
 			}
@@ -934,20 +1187,35 @@ public class Tools
 		{			
 			con.drawImage(pBackground, 0, 250);
 			con.drawImage(playerAttack[intFrame], 200, 250);
-			con.sleep(500);
+			con.repaint();
+			con.sleep(300);
 		}
 	}
 	
-	public static void drawEnemyAttack(Console con, BufferedImage[] enemyAttack, BufferedImage eBackground, int intNumOfFrames)
+	public static void drawEnemyAttack(Console con, BufferedImage[] enemyAttack, BufferedImage eBackground, int intNumOfFrames, int intEnemyType)
+	
 	{
 		int intFrame;
 		
-		for (intFrame = 0; intFrame < intNumOfFrames; intFrame++)
-		{			
-			con.drawImage(eBackground, 800, 250);
-			con.drawImage(enemyAttack[intFrame], 850, 300);
-			con.repaint();
-			con.sleep(500);
+		if (intEnemyType == 1)
+		{
+			for (intFrame = 0; intFrame < intNumOfFrames; intFrame++)
+			{			
+				con.drawImage(eBackground, 800, 250);
+				con.drawImage(enemyAttack[intFrame], 850, 300);
+				con.repaint();
+				con.sleep(300);
+			}
+		}
+		else if (intEnemyType == 2)
+		{
+			for (intFrame = 0; intFrame < intNumOfFrames; intFrame++)
+			{			
+				con.drawImage(eBackground, 800, 250);
+				con.drawImage(enemyAttack[intFrame], 650, 250);
+				con.repaint();
+				con.sleep(300);
+			}
 		}
 	}
 	

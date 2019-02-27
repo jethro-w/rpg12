@@ -3,7 +3,6 @@ import java.awt.Font;
 import java.awt.image.BufferedImage;
 import arc.*;
 
-@SuppressWarnings("unused")
 public class RPGMain
 {
 	public static void main(String[] args)
@@ -14,11 +13,8 @@ public class RPGMain
 		int intScore = 0;
 		int intX = 0; // The starting position is at (19,2), but the array starts at 0
 		int intY = 0; // Top left corner is (0,0).
-		int intPrevX = 22;
-		int intPrevY = 1;
 		int intEndBattle = 0;
-		int intMap;
-		char chrInput = ' ';
+		int intMap = 0;
 		char chrItem = ' ';
 		char chrMove = ' ';
 		char chrPrevMove = 'a';
@@ -29,6 +25,7 @@ public class RPGMain
 		Boolean blnQuit = false;
 		Boolean blnWin = false;
 		Boolean blnLose = false;
+		Boolean bln250HP = false;
 		BufferedImage playerLeft = con.loadImage("anglerLeft.png");
 		BufferedImage playerRight = con.loadImage("anglerRight.png");
 		TextOutputFile highscores = new TextOutputFile("highscores.txt", true);
@@ -38,7 +35,7 @@ public class RPGMain
 		{
 			// Menu
 			Tools.clearAll(con);
-			intNext = Tools.menu(con, chrInput);
+			intNext = Tools.menu(con);
 			// jethroWTools.logo(con);
 
 			if (intNext == 1)
@@ -48,18 +45,15 @@ public class RPGMain
 				// Clear Screen
 				Tools.clearAll(con);
 
-				// Reset Player Stats
+				// Reset All Stats
 				Tools.resetStats(con);
-
-				// Load Map
-
-				// Get username
-				// con.setTextFont(nameFont);
-				con.println("Enter your username:");
-				strUsername = con.readLine();
-
-				con.println("select map");
-				intMap = con.readInt();
+				
+				// Get Username
+				strUsername = Tools.askForUsername(con);
+				Tools.clearAll(con);
+				
+				// Ask for Map
+				intMap = Tools.askForMap(con);
 				con.clear();
 
 				if (intMap == 1)
@@ -74,26 +68,29 @@ public class RPGMain
 				}
 
 				// Print Map
-				if (temp == true)
+				if (intMap == 1 || intMap == 2)
 				{
 					Tools.clearAll(con);
 
 					strMap = Tools.loadMap(con, strMap, intMap);
-					Tools.printMap(con, strMap);
+					Tools.printMap(con, strMap, intX, intY);
+					Tools.drawFog(con, intX, intY);
+					Tools.drawCurrentStats(con, intScore, bln250HP);
 
 					con.drawImage(playerLeft, (intX * 40) + 200, (intY * 40) + 100);
 					con.repaint();
 
 					// Start Game
-					for (intScore = 0; blnWin == false; intScore++)
+					for (intScore = 0; blnWin == false && blnLose == false; intScore++)
 					{
-						while (chrMove != 'w' && chrMove != 'a' && chrMove != 's' && chrMove != 'd')
+						while (chrMove != 'w' && chrMove != 'a' && chrMove != 's' && chrMove != 'd' && chrMove != ']' && chrMove != '[')
 						{
 							chrMove = con.getChar();
 						}
 
 						if (chrMove == 'w' && intY != 0
 								&& (strMap[intY - 1][intX].equals("_") || strMap[intY - 1][intX].equals("x")
+										|| strMap[intY - 1][intX].equals("l") || strMap[intY - 1][intX].equals("*")
 										|| strMap[intY - 1][intX].equals("X") || strMap[intY - 1][intX].equals("z")
 										|| strMap[intY - 1][intX].equals("c") || strMap[intY - 1][intX].equals("v")
 										|| strMap[intY - 1][intX].equals("1") || strMap[intY - 1][intX].equals("2")
@@ -103,6 +100,7 @@ public class RPGMain
 						}
 						else if (chrMove == 'a' && intX != 0
 								&& (strMap[intY][intX - 1].equals("_") || strMap[intY][intX - 1].equals("x")
+										|| strMap[intY][intX - 1].equals("l") || strMap[intY][intX - 1].equals("*")
 										|| strMap[intY][intX - 1].equals("X") || strMap[intY][intX - 1].equals("z")
 										|| strMap[intY][intX - 1].equals("c") || strMap[intY][intX - 1].equals("v")
 										|| strMap[intY][intX - 1].equals("1") || strMap[intY][intX - 1].equals("2")
@@ -112,6 +110,7 @@ public class RPGMain
 						}
 						else if (chrMove == 's' && intY != 19
 								&& (strMap[intY + 1][intX].equals("_") || strMap[intY + 1][intX].equals("x")
+										|| strMap[intY + 1][intX].equals("l") || strMap[intY + 1][intX].equals("*")
 										|| strMap[intY + 1][intX].equals("X") || strMap[intY + 1][intX].equals("z")
 										|| strMap[intY + 1][intX].equals("c") || strMap[intY + 1][intX].equals("v")
 										|| strMap[intY + 1][intX].equals("1") || strMap[intY + 1][intX].equals("2")
@@ -121,6 +120,7 @@ public class RPGMain
 						}
 						else if (chrMove == 'd' && intX != 19
 								&& (strMap[intY][intX + 1].equals("_") || strMap[intY][intX + 1].equals("x")
+										|| strMap[intY][intX + 1].equals("l") || strMap[intY][intX + 1].equals("*")
 										|| strMap[intY][intX + 1].equals("X") || strMap[intY][intX + 1].equals("z")
 										|| strMap[intY][intX + 1].equals("c") || strMap[intY][intX + 1].equals("v")
 										|| strMap[intY][intX + 1].equals("1") || strMap[intY][intX + 1].equals("2")
@@ -132,6 +132,10 @@ public class RPGMain
 						else if (chrMove == ']')
 						{
 							blnWin = true;
+						}
+						else if (chrMove == '[')
+						{
+							blnLose = true;
 						}
 
 						con.repaint();
@@ -145,7 +149,7 @@ public class RPGMain
 							
 							if (intEndBattle == 1)
 							{
-								strMap[intY][intX] = "_";
+								strMap[intY][intX] = "l";
 							}
 							else if (intEndBattle == 2)
 							{
@@ -159,7 +163,8 @@ public class RPGMain
 						}
 						
 						//Print player's updated position
-						Tools.printMap(con, strMap);
+						Tools.printMap(con, strMap, intX, intY);
+						Tools.drawCurrentStats(con, intScore, bln250HP);
 						
 						if (chrMove == 'a' || (chrPrevMove == 'a' && chrMove != 'd'))
 						{
@@ -178,51 +183,60 @@ public class RPGMain
 							}
 						}
 						
+						// Lava Damage
+						if (strMap[intY][intX].equals("*"))
+						{
+							Tools.lavaDamage(con);
+							strMap[intY][intX] = "l";
+						}
+						
 						// Items
-
+						if (strMap[intY][intX].equals("1") || strMap[intY][intX].equals("2")
+								|| strMap[intY][intX].equals("3") || strMap[intY][intX].equals("4"))
+						{
+							bln250HP = Tools.items(con, strMap, intX, intY, intScore);
+						}
+						
+						// Replace Air with Ladder
+						strMap[intY][intX] = "l";
+						
 						// Reset variables
 						intEndBattle = 0;
-						intPrevX = intX;
-						intPrevY = intY;
 						chrMove = ' ';
 						chrItem = ' ';
 					}
-				}
-				// Victory Screen
-				if (blnWin == true && blnLose == false)
-				{
 					
+					// Victory Screen
+					if (blnWin == true && blnLose == false)
+					{
+						Tools.victoryScreen(con);
+					}
+					// Lose Screen
+					else
+					{
+						Tools.loseScreen(con);
+					}
+					blnWin = false;
+					blnLose = false;
 				}
-				// Lose Screen
-				else
-				{
-
-				}
-				blnWin = false;
 			}
 			// Control Menu
 			else if (intNext == 2)
 			{
-				con.println("control menu");
-				intNext = con.readInt();
-			}
-			// Help Menu
-			else if (intNext == 3)
-			{
-				con.println("help menu");
-				intNext = con.readInt();
+				Tools.controlMenu(con);
 			}
 			// Highscores
-			else if (intNext == 4)
+			/*
+			else if (intNext == 3)
 			{
-				con.println("highscores menu");
-				intNext = con.readInt();
+				Tools.highscores(con);
 			}
-			else if (intNext == 5)
+			*/
+			else if (intNext == 3)
 			{
 				blnQuit = true;
 			}
-			if (intNext == 5)
+			if (intNext == 3)
 			{
 				con.closeConsole();
 			}
