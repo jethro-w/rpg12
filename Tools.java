@@ -19,7 +19,7 @@ public class Tools
 		int intFrame = 0;
 		char chrLR = 'n';
 		Font menuFont = con.loadFont("I-pixel-u.ttf", 150);
-		Font menuChoiceFont = con.loadFont("I-pixel-u.ttf", 40);
+		Font menuChoiceFont = con.loadFont("I-pixel-u.ttf", 30);
 		Font defaultFont = con.loadFont("Hack-Regular.ttf", 24);
 		BufferedImage[] enemyStatic = new BufferedImage[2];
 		BufferedImage background = con.loadImage("battleBackground.png");
@@ -58,15 +58,13 @@ public class Tools
 			}
 			else if (intNext == 2)
 			{
-				con.drawString("Controls", 750, 650);
+				con.drawString("Controls", 650, 650);
 			}
-			/*
 			else if (intNext == 3)
 			{
-				con.drawString("High Scores", 900, 650);
+				con.drawString("Help", 925, 650);
 			}
-			*/
-			else if (intNext == 3)
+			else if (intNext == 4)
 			{
 				con.drawString("Quit", 1150, 650);
 			}
@@ -78,15 +76,13 @@ public class Tools
 			}
 			if (intNext != 2)
 			{
-				con.drawString("Controls", 750, 650);
+				con.drawString("Controls", 650, 650);
 			}
-			/*
 			if (intNext != 3)
 			{
-				con.drawString("High Scores", 900, 650);
+				con.drawString("Help", 925, 650);
 			}
-			*/
-			if (intNext != 3)
+			if (intNext != 4)
 			{
 				con.drawString("Quit", 1150, 650);
 			}
@@ -99,7 +95,7 @@ public class Tools
 			{
 				intNext = intNext - 1;
 			}
-			else if (chrLR == 'd' && intNext != 3)
+			else if (chrLR == 'd' && intNext != 4)
 			{
 				intNext = intNext + 1;
 			}
@@ -982,25 +978,54 @@ public class Tools
 
 	public static void helpMenu(Console con)
 	{
-		int intPage = 1;
-		boolean blnLeave = false;
-		char chrLeave = ' ';
-
-		while (blnLeave == false)
+		Tools.clearAll(con);
+		
+		int intX;
+		int intY;
+		Font titleFont = con.loadFont("I-pixel-u.ttf", 50);
+		Font drawFont = con.loadFont("I-pixel-u.ttf", 30);
+		Font defaultFont = con.loadFont("Hack-Regular.ttf", 24);
+		BufferedImage fog = con.loadImage("fog1.png");
+		BufferedImage air = con.loadImage("air.png");
+		BufferedImage player = con.loadImage("anglerLeft.png");
+		BufferedImage gem = con.loadImage("demonite.png");
+		
+		con.setDrawColor(Color.WHITE);
+		con.setDrawFont(titleFont);
+		
+		con.drawString("Help Menu", 100, 75);
+		
+		con.setDrawFont(drawFont);
+		
+		con.drawString("The goal of the game is to find the golem boss and defeat it. However, you are surrounded by", 100, 200);
+		con.drawString("fog. You must navigate in the fog and collect items to make yourself stronger. Each time", 100, 240);
+		con.drawString("you travel on a tile, it will become a ladder tile. Use it as a breadcrum trail to find your", 100, 280);
+		con.drawString("way around the map.", 100, 320);
+		
+		con.drawString("While exploring the cave, you will encounter walls that you cannot travel through as well as", 100, 400);
+		con.drawString("enemies that you might have to fight.", 100, 440);
+		
+		for (intX = 0; intX < 3; intX++)
 		{
-			if (intPage == 1)
+			for (intY = 0; intY < 3; intY++)
 			{
-				if (chrLeave == 's')
-				{
-					blnLeave = true;
-				}
-				else if (blnLeave == false)
-				{
-					con.getChar();
-					blnLeave = true;
-				}
+				con.drawImage(air, (intX * 40) + 100, (intY * 40) + 600);
 			}
 		}
+		
+		con.drawImage(player, 140, 640);
+		con.drawImage(fog, 100, 600);
+		con.drawImage(gem, 1300, 690);
+		
+		con.drawString("The player is surrounded by a 2x2 tile fog.", 300, 600);
+		con.drawString("Gemstones like these will increase your stats.", 600, 680);
+		
+		con.drawString("Press any key to return to main menu", 500, 800);
+		
+		con.setDrawFont(defaultFont);
+		con.repaint();
+		
+		con.getChar();
 	}
 
 	// Controls Menu

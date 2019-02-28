@@ -7,7 +7,7 @@ public class RPGMain
 {
 	public static void main(String[] args)
 	{
-		Console con = new Console(1600, 1000);
+		Console con = new Console("Cave Quest RPG", 1600, 1000);
 
 		int intNext = 0;
 		int intScore = 0;
@@ -15,11 +15,8 @@ public class RPGMain
 		int intY = 0; // Top left corner is (0,0).
 		int intEndBattle = 0;
 		int intMap = 0;
-		char chrItem = ' ';
 		char chrMove = ' ';
 		char chrPrevMove = 'a';
-		Boolean temp = true;
-		// Font nameFont = con.loadFont("Hack-Regular.ttf", 20);
 		String strUsername;
 		String strMap[][] = new String[20][20];
 		Boolean blnQuit = false;
@@ -28,7 +25,7 @@ public class RPGMain
 		Boolean bln250HP = false;
 		BufferedImage playerLeft = con.loadImage("anglerLeft.png");
 		BufferedImage playerRight = con.loadImage("anglerRight.png");
-		TextOutputFile highscores = new TextOutputFile("highscores.txt", true);
+		// TextOutputFile highscores = new TextOutputFile("highscores.txt", true);
 
 		// Menu Loop
 		while (blnQuit == false)
@@ -203,7 +200,6 @@ public class RPGMain
 						// Reset variables
 						intEndBattle = 0;
 						chrMove = ' ';
-						chrItem = ' ';
 					}
 					
 					// Victory Screen
@@ -225,18 +221,16 @@ public class RPGMain
 			{
 				Tools.controlMenu(con);
 			}
-			// Highscores
-			/*
+			// Help
 			else if (intNext == 3)
 			{
-				Tools.highscores(con);
+				Tools.helpMenu(con);
 			}
-			*/
-			else if (intNext == 3)
+			else if (intNext == 4)
 			{
 				blnQuit = true;
 			}
-			if (intNext == 3)
+			if (intNext == 4)
 			{
 				con.closeConsole();
 			}
