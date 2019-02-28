@@ -439,8 +439,8 @@ public class Tools
 		int intFrame;
 		int intRand = 0;
 		int intEnemyType = 0;
-		int intBarMultiplier;
-		int intPMaxHP = 200;
+		double dblBarMultiplier;
+		int intPMaxHP;
 		int intEMaxHP;
 		int intEndBattle = 0;
 		int intPMissingHP = 0;
@@ -543,6 +543,14 @@ public class Tools
 		}
 		
 		intEMaxHP = (int) (dblStats[intEnemyType][0]);
+		if (dblStats[0][0] > 200)
+		{
+			intPMaxHP = 250;
+		}
+		else
+		{
+			intPMaxHP = 200;
+		}
 
 		// Draw Game Console
 		Tools.clearAll(con);
@@ -575,22 +583,22 @@ public class Tools
 			
 			if (dblStats[intEnemyType][0] < 0)
 			{
-				con.drawString("Health: 0 / " + intEMaxHP, 1000, 170);
+				con.drawString("Health: 0 / " + intEMaxHP, 100, 170);
 			}
 			else
 			{
-				con.drawString("Health: " + (int) dblStats[intEnemyType][0] + " / " + intEMaxHP, 900, 170);
+				con.drawString("Health: " + (int) dblStats[intEnemyType][0] + " / " + intEMaxHP, 1000, 170);
 			}
 			con.repaint();
 			
 			// Health Bars
 			con.setDrawColor(Color.GREEN);
 			con.fillRect(200, 210, 400, 40);
-			con.fillRect(900, 210, 400, 40);
+			con.fillRect(1000, 210, 400, 40);
 			con.repaint();
 			con.setDrawColor(Color.RED);
 			
-			intBarMultiplier = 400 / intEMaxHP;
+			dblBarMultiplier = 400 / intEMaxHP;
 			
 			// Check if player or enemy is dead
 			if (dblStats[0][0] < 0.0)
@@ -621,7 +629,7 @@ public class Tools
 			con.fillRect(600 - intPMissingHP, 210, intPMissingHP, 40);
 			
 			// Enemy Red Bar
-			con.fillRect(1300 - (intEMissingHP * intBarMultiplier), 210, intEMissingHP * intBarMultiplier, 40);
+			con.fillRect(1400 - ((int) (intEMissingHP * dblBarMultiplier)), 210, ((int) (intEMissingHP * dblBarMultiplier)), 40);
 			con.repaint();
 			
 			if (dblStats[0][0] <= 0.0 || dblStats[intEnemyType][0] <= 0.0)
@@ -839,6 +847,8 @@ public class Tools
 			dblStats[0][2] = dblStats[0][2] + 10;
 		}
 		con.repaint();
+		
+		con.sleep(1000);
 
 		for (intRow = 0; intRow < 3; intRow++)
 		{
@@ -1154,13 +1164,13 @@ public class Tools
 				{
 					con.drawImage(eBackground, 800, 250);
 					con.repaint();
-					con.drawImage(enemyStatic[intFrame], 800, 250);
+					con.drawImage(enemyStatic[intFrame], 900, 250);
 					con.repaint();
 				}
 				
 				con.drawImage(pBackground, 0, 250);
 				con.repaint();
-				con.drawImage(playerStatic[intFrame2], 200, 300);
+				con.drawImage(playerStatic[intFrame2], 200, 275);
 				con.repaint();
 				intFrame2++;
 				
@@ -1183,7 +1193,7 @@ public class Tools
 		for (intFrame = 0; intFrame < intNumOfFrames; intFrame++)
 		{			
 			con.drawImage(pBackground, 0, 250);
-			con.drawImage(playerAttack[intFrame], 200, 250);
+			con.drawImage(playerAttack[intFrame], 200, 275);
 			con.repaint();
 			con.sleep(300);
 		}
