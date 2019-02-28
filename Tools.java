@@ -563,7 +563,7 @@ public class Tools
 		while (intEndBattle == 0)
 		{	
 			Tools.drawBattleConsole(con);
-			con.drawString("What will you do?", 216, 756);
+			con.drawString("What will you do? (Hold to select)", 216, 756);
 			con.drawString("[1] Attack", 216, 790);
 			con.drawString("[2] Block/Defend", 216, 820);
 			con.drawImage(hBackground, 0, 0);
