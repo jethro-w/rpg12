@@ -1,5 +1,3 @@
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.image.BufferedImage;
 import arc.*;
 
@@ -17,7 +15,6 @@ public class RPGMain
 		int intMap = 0;
 		char chrMove = ' ';
 		char chrPrevMove = 'a';
-		String strUsername;
 		String strMap[][] = new String[20][20];
 		Boolean blnQuit = false;
 		Boolean blnWin = false;
@@ -45,8 +42,6 @@ public class RPGMain
 				// Reset All Stats
 				Tools.resetStats(con);
 				
-				// Get Username
-				strUsername = Tools.askForUsername(con);
 				Tools.clearAll(con);
 				
 				// Ask for Map
