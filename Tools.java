@@ -10,7 +10,6 @@ public class Tools
 		BufferedImage logo = con.loadImage("logo.png");
 
 		con.drawImage(logo, 1500, 900);
-		con.repaint();
 	}
 		
 	// Menu
@@ -356,8 +355,6 @@ public class Tools
 				}
 
 				intX = intX + 40;
-
-				con.repaint();
 			}
 			intY = intY + 40;
 		}
